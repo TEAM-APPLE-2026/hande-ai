@@ -1,4 +1,24 @@
-[
-  { "text": "10월 초에 △△ 통신사에서 고객정보가 유출됐다는 문자를 받았어요. 이름, 연락처, 주소가 유출됐다고 했어요. 10월 초부터 택배 사칭 스미싱 문자가 세 번 왔어요.",
-    "expect": { "company": "△△ 통신사", "type": "개인정보 유출", "leaked": "이름 · 연락처 · 주소", "secondary": "스미싱 3회", "card": null } }
-]
+{
+  "now": "2026-11-11",
+  "cases": [
+    { "text": "10월 초에 △△ 통신사에서 고객정보가 유출됐다는 문자를 받았어요. 이름, 연락처, 주소가 유출됐다고 했어요. 10월 초부터 택배 사칭 스미싱 문자가 세 번 왔어요.",
+      "expect": { "company": "△△ 통신사", "type": "privacy_leak", "notice_date": { "from": "2026-10-01", "to": "2026-10-10", "precision": "month" },
+        "leaked": ["이름", "연락처", "주소"], "secondary": "yes", "card": null } },
+    { "text": "2025.3.14 ○○ 쇼핑몰 해킹 안내 메일을 받았어요. 이메일 주소와 비밀번호가 유출됐대요. 카드 정보는 유출되지 않았대요.",
+      "expect": { "company": "○○ 쇼핑몰", "type": "privacy_leak", "notice_date": { "from": "2025-03-14", "to": "2025-03-14", "precision": "day" },
+        "leaked": ["이메일", "비밀번호"], "secondary": null, "card": "no" } },
+    { "text": "□□ 카드사에서 지난달 개인정보 유출 공지를 했어요. 이름, 생년월일, 카드번호가 유출됐대요. 그 뒤로 보이스피싱 전화가 두 번 왔어요.",
+      "expect": { "company": "□□ 카드사", "type": "privacy_leak", "notice_date": { "from": "2026-10-01", "to": "2026-10-31", "precision": "month" },
+        "leaked": ["이름", "생년월일"], "secondary": "yes", "card": "yes" } },
+    { "text": "9월 중순에 ◇◇ 보험사에서 고객정보가 털렸다는 안내 문자가 왔어요. 주소랑 전화번호가 나갔대요. 2차 피해는 아직 없어요.",
+      "expect": { "company": "◇◇ 보험사", "type": "privacy_leak", "notice_date": { "from": "2026-09-11", "to": "2026-09-20", "precision": "month" },
+        "leaked": ["전화번호", "주소"], "secondary": "no", "card": null } },
+    { "text": "2026년 8월 2일 ☆☆ 여행사가 회원 정보 유출 사실을 통지했습니다. 여권 정보와 연락처가 포함됐다고 합니다. 2차 피해가 있는지는 잘 모르겠어요.",
+      "expect": { "company": "☆☆ 여행사", "type": "privacy_leak", "notice_date": { "from": "2026-08-02", "to": "2026-08-02", "precision": "day" },
+        "leaked": ["연락처"], "secondary": "unknown", "card": null } },
+    { "text": "△△ 은행 앱에서 제 명의로 모르는 대출이 생겼어요. 명의 도용 같아요.",
+      "expect": { "company": "△△ 은행", "type": null, "notice_date": null, "leaked": null, "secondary": "yes", "card": null } },
+    { "text": "오늘 날씨가 좋네요.",
+      "expect": { "company": null, "type": null, "notice_date": null, "leaked": null, "secondary": null, "card": null } }
+  ]
+}
