@@ -1,7 +1,7 @@
 {
   "name": "@team-apple/hande-ai",
-  "version": "0.1.0",
-  "description": "HANDE AI 모듈 — 피해 글 정리(extract)와 같은 사건 찾기(match). 브라우저에서 실행",
+  "version": "0.2.0",
+  "description": "HANDE AI 모듈 — 피해 글 정리(extract) · 같은 사건 찾기(match) · 로펌용 요약(summarize). 브라우저에서 실행",
   "type": "module",
   "main": "src/index.js",
   "exports": { ".": "./src/index.js" },
