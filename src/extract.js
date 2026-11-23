@@ -4,6 +4,7 @@ import { parseNoticeDate } from './date.js';
 import { findSensitive, overlaps } from './sensitive.js';
 
 export const FIELD_KEYS = ['company', 'type', 'notice_date', 'leaked', 'secondary', 'card'];
+export const OPTIONAL_FIELD_KEYS = ['secondary_detail']; // 찾았을 때만 결과에 넣는다
 export const MAX_TEXT_LENGTH = 2000; // save_report 원문 1~2000자
 
 // 유출 정보: 화면에 쓰는 이름 ← 원문 표현 (검사 순서: "이메일 주소"가 '주소'로 잡히지 않게 긴 표현 먼저)
@@ -27,7 +28,18 @@ const SECONDARY_NO = /2차\s?피해[^.!?\n]*?(?:없|아직\s?(?:없|안))|(?:별
 const SECONDARY_UNKNOWN = /2차\s?피해[^.!?\n]*?(?:모르|모름|잘\s?모)/;
 const SECONDARY_YES = /스미싱|보이스\s?피싱|피싱|명의\s?도용|사칭\s?(?:문자|전화)|스팸\s?(?:문자|전화)|무단\s?(?:결제|이체)|부정\s?(?:결제|사용)/;
 
-const CARD_NO = /카드\s?(?:정보|번호)[^.!?\n]*?(?:유출되지\s?않|포함되지\s?않|유출\s?안|포함\s?안|안전|없)/;
+// 2차 피해 상세: 원문 표현(공백 제거) → 화면에 쓰는 이름
+const HARM_LABEL = {
+  스미싱: '스미싱 문자', 보이스피싱: '보이스피싱 전화', 피싱: '피싱', 명의도용: '명의도용',
+  사칭문자: '사칭 문자', 사칭전화: '사칭 전화', 스팸문자: '스팸 문자', 스팸전화: '스팸 전화',
+  무단결제: '무단 결제', 무단이체: '무단 이체', 부정결제: '부정 결제', 부정사용: '부정 사용'
+};
+const HARM_TOKEN = /스미싱|보이스\s?피싱|피싱|명의\s?도용|사칭\s?(?:문자|전화)|스팸\s?(?:문자|전화)|무단\s?(?:결제|이체)|부정\s?(?:결제|사용)/g;
+const HARM_COUNT = /(\d{1,3}|한|두|세|네|다섯|여섯|일곱|여덟|아홉|열)\s?(?:번|회|차례|건)/;
+const HARM_NEGATED = /없|않|안\s?(?:왔|받|당)/;
+const KOREAN_COUNT = { 한: 1, 두: 2, 세: 3, 네: 4, 다섯: 5, 여섯: 6, 일곱: 7, 여덟: 8, 아홉: 9, 열: 10 };
+
+const CARD_NO =/카드\s?(?:정보|번호)[^.!?\n]*?(?:유출되지\s?않|포함되지\s?않|유출\s?안|포함\s?안|안전|없)/;
 const CARD_UNKNOWN = /카드\s?(?:정보|번호)[^.!?\n]*?(?:모르|모름|확인\s?중)/;
 const CARD_YES = /카드\s?(?:정보|번호)/;
 
@@ -123,12 +135,35 @@ const RULES = {
       if (hit) return { value, quote: hit.quote, needsCheck: value === 'unknown' };
     }
     return null;
+  },
+
+  // "스미싱 문자 3회"처럼 종류와 횟수만 만든다. 원문을 복사하지 않으므로 민감 번호가 들어가지 않는다.
+  secondary_detail(text, ranges, sents) {
+    const counts = new Map();
+    let source = null;
+    for (const s of sents) {
+      const tokens = [...s.text.matchAll(HARM_TOKEN)];
+      tokens.forEach((m, i) => {
+        const label = HARM_LABEL[m[0].replace(/\s/g, '')];
+        const after = s.text.slice(m.index + m[0].length, tokens[i + 1]?.index ?? s.text.length);
+        // 부정은 이 피해를 말하는 절 안에서만 본다 ("스미싱이 세 건 있었는데 카드 피해는 없어요"는 있음)
+        const clause = after.split(/는데|지만|[,，]/)[0];
+        if (HARM_NEGATED.test(clause)) return;
+        const c = clause.match(HARM_COUNT);
+        const count = c ? (KOREAN_COUNT[c[1]] ?? +c[1]) : null;
+        if (!counts.has(label) || (counts.get(label) === null && count !== null)) counts.set(label, count);
+        source ??= { sentence: s, token: m[0], tokenStart: s.start + m.index };
+      });
+    }
+    if (!source) return null;
+    const value = [...counts].map(([label, n]) => (n ? `${label} ${n}회` : label)).join(', ');
+    return { value, quote: makeQuote(source.sentence, source.token, source.tokenStart, ranges) };
   }
 };
 
 /**
- * @typedef {'company'|'type'|'notice_date'|'leaked'|'secondary'|'card'} FieldKey
- * @typedef {string|string[]|{from:string|null,to:string|null,precision:'day'|'month'|'year'|'unknown'}} FieldValue
+ * @typedef {'company'|'type'|'notice_date'|'leaked'|'secondary'|'card'|'secondary_detail'} FieldKey
+ * @typedef {string|string[]|{from:string,to:string,precision:'day'|'month'|'year'}} FieldValue
  * @typedef {{key:FieldKey, aiValue:FieldValue|null, quote:string|null, userValue:FieldValue|null, source:'ai'|'user', needsCheck:boolean}} ReportField
  *
  * @param {string} text 사용자가 쓴 피해 글 (1~2000자)
@@ -141,7 +176,7 @@ export function extract(text, { now = new Date() } = {}) {
 
   const ranges = findSensitive(text);
   const sents = sentences(text);
-  const fields = FIELD_KEYS.map((key) => {
+  const toField = (key) => {
     const r = RULES[key](text, ranges, sents, now);
     const aiValue = r?.value ?? null;
     const quote = aiValue === null ? null : (r.quote ?? null);
@@ -154,6 +189,12 @@ export function extract(text, { now = new Date() } = {}) {
       // 근거(quote)를 못 붙인 값도 확인 필요 (민감 번호와 겹쳐 근거를 뺀 경우 등)
       needsCheck: aiValue === null || quote === null || r.needsCheck === true
     };
-  });
+  };
+  const fields = FIELD_KEYS.map(toField);
+  // 상세는 2차 피해가 yes일 때만. 없으면 필드를 넣지 않는다(null+needsCheck=false는 저장 함수가 거부).
+  if (fields.find((f) => f.key === 'secondary').aiValue === 'yes') {
+    const detail = toField('secondary_detail');
+    if (detail.aiValue !== null) fields.push(detail);
+  }
   return { fields, warnings: ranges.length ? ['SENSITIVE_NUMBER'] : [] };
 }

@@ -18,7 +18,7 @@ experiments/ 모델 실험 기록 (채택한 것만 src로)
 ## 프론트엔드에서 쓰는 법
 ```bash
 # frontend 폴더에서 (버전 태그로 고정)
-npm install github:TEAM-APPLE-2026/hande_ai#v0.2.0
+npm install github:TEAM-APPLE-2026/hande-ai#v0.3.0
 ```
 ```js
 import { analyze, extract, match, summarize } from '@team-apple/hande-ai';
@@ -39,8 +39,8 @@ const lines = summarize(stats);                // "\n"으로 이은 3~4줄
 
 ### extract(text, { now? }) → `{ fields: ReportField[], warnings: string[] }`
 ```ts
-type FieldKey = 'company' | 'type' | 'notice_date' | 'leaked' | 'secondary' | 'card';
-type FieldValue = string | string[] | { from: string | null; to: string | null; precision: 'day' | 'month' | 'year' | 'unknown' };
+type FieldKey = 'company' | 'type' | 'notice_date' | 'leaked' | 'secondary' | 'card' | 'secondary_detail';
+type FieldValue = string | string[] | { from: string; to: string; precision: 'day' | 'month' | 'year' };
 type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | null;
   userValue: FieldValue | null; source: 'ai' | 'user'; needsCheck: boolean };
 ```
@@ -48,26 +48,25 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 |---|---|---|
 | company | 기업명 string | `"△△ 통신사"` |
 | type | `'privacy_leak'` (개인정보 유출이 아니면 null) | `"privacy_leak"` |
-| notice_date | `{ from, to, precision }` (아래 규칙) | `{ from:"2026-10-01", to:"2026-10-10", precision:"month" }` |
+| notice_date | `{ from, to, precision }` (아래 규칙) | `{ from:"2026-10-01", to:"2026-10-31", precision:"month" }` |
 | leaked | string[] — 이름 · 연락처 · 전화번호 · 주소 · 이메일 · 생년월일 · 주민등록번호 · 계좌 · 아이디 · 비밀번호 | `["이름","연락처","주소"]` |
 | secondary | `'yes' \| 'no' \| 'unknown'` (2차 피해) | `"yes"` |
 | card | `'yes' \| 'no' \| 'unknown'` (카드 정보 유출) | `null` |
+| secondary_detail (선택) | 2차 피해 상세 string, 1~1000자 | `"스미싱 문자 3회"` |
 
-- fields는 항상 위 순서로 6개. extract는 `userValue=null`, `source='ai'`로 채운다. 사용자가 고치면 화면에서 userValue와 source='user'만 바꾸고 aiValue · quote는 그대로 둔다.
+- fields는 기본 6개가 항상 위 순서로 오고, 2차 피해 상세를 찾은 경우에만 맨 뒤에 `secondary_detail`이 붙는다. 상세가 없으면 이 필드는 결과에 없다(저장 함수는 null이면서 needsCheck=false인 필드를 거부한다). extract는 `userValue=null`, `source='ai'`로 채운다. 사용자가 고치면 화면에서 userValue와 source='user'만 바꾸고 aiValue · quote는 그대로 둔다.
 - **못 찾으면 aiValue=null, quote=null, needsCheck=true** (화면: "확인 필요"). `unknown`으로 찾은 값, 근거(quote)를 붙이지 못한 값도 needsCheck=true.
 - **quote는 원문 안에 그대로 있는 문자열**(대개 근거 문장, 날짜·회사는 그 표현). 외부 공개하지 않음.
 - **warnings**: 주민등록번호 · 카드번호 · 계좌번호 모양의 숫자가 있으면 `['SENSITIVE_NUMBER']`. 번호 자체는 결과(aiValue · quote) 어디에도 넣지 않는다 — 번호가 섞인 문장은 quote를 짧은 표현으로 바꾸거나 null로 둔다. 전화번호(010-…, 02-…)와 날짜는 해당 없음.
 - 빈 글이면 `Error('EMPTY_TEXT')`, 2000자 넘으면 `Error('TEXT_TOO_LONG')` (analyze에서는 INVALID_INPUT).
 
 ### notice_date 규칙
-연도가 없으면 **올해**(`now`, 기본: 오늘) 기준. 기간 끝은 그 달의 말일.
+연도가 없으면 **올해**(`now`, 기본: 오늘) 기준. 백엔드 저장 함수 규칙에 따라 day는 from=to, month는 그 달 1일~말일, year는 1/1~12/31만 쓴다.
 
 | 원문 | from ~ to | precision |
 |---|---|---|
 | `2026년 10월 3일`, `2025.3.14`, `2025-12-01`, `9월 5일` | 그날 ~ 그날 | day |
-| `10월 초` · `10월 상순` | 10/1 ~ 10/10 | month |
-| `10월 중순` | 10/11 ~ 10/20 | month |
-| `10월 말` · `10월 하순` | 10/21 ~ 10/31 | month |
+| `10월 초` · `상순` · `중순` · `하순` · `말` | 10/1 ~ 10/31 (세부 표현은 quote에 원문 그대로) | month |
 | `8월`, `2024년 2월` | 그달 1일 ~ 말일 | month |
 | `2025년`, `작년` | 1/1 ~ 12/31 | year |
 | `지난달` · `저번 달`, `이번 달` | 그달 1일 ~ 말일 | month |
@@ -75,7 +74,8 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 
 - 날짜가 여러 개면 **통지 문장**(안내 · 문자 · 메일 · 공지 · 통지 등이 있는 문장)의 날짜를 먼저 고르고, 스미싱 등 2차 피해 문장의 날짜는 뒤로 미룬다. 통지 문장이 아닌 곳에서 고른 날짜는 needsCheck=true.
 - 없는 날짜(2월 30일)는 날짜로 쓰지 않는다.
-- notice_date가 발생일인지 통지일인지는 BE1과 확인 중(계약 4장). 지금은 **통지일**을 우선해서 고른다.
+- 날짜를 전혀 못 찾으면 `aiValue=null`, `needsCheck=true`. `{ precision:'unknown' }` 객체는 만들지 않는다.
+- notice_date는 실제 유출일이 아니라 **통지받은 시점**이다(백엔드 report-storage 문서).
 
 ### match(report, groups) → `[{ groupId, score, level, matches, diffs }]`
 - report: `{ fields: ReportField[] }`(또는 fields 배열). 값은 source='user'면 userValue, 아니면 aiValue.
@@ -116,6 +116,6 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 
 ## 버전 올리기
 ```bash
-npm version minor        # 0.2.0 → 0.3.0, 태그 v0.3.0 생성
+npm version minor        # 0.3.0 → 0.4.0, 태그 v0.4.0 생성
 git push --follow-tags
 ```
