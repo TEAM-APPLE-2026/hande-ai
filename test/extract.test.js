@@ -110,6 +110,63 @@ test('2차 피해 · 카드: yes / no / unknown', () => {
   assert.equal(unk.secondary.needsCheck, true);
 });
 
+test('부정: "스미싱 문자는 안 왔어요" → secondary no, 상세 없음', () => {
+  const text = '△△ 통신사 유출이요. 스미싱 문자는 안 왔어요.';
+  const f = fieldsOf(text);
+  assert.equal(f.secondary.aiValue, 'no');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.secondary.quote, '스미싱 문자는 안 왔어요.');
+  assert.ok(!('secondary_detail' in f));
+});
+
+test('부정: "이상한 문자는 없었고 카드는 괜찮대요" → secondary no, card no', () => {
+  const f = fieldsOf('이상한 문자는 없었고 카드는 괜찮대요.');
+  assert.equal(f.secondary.aiValue, 'no');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.card.aiValue, 'no');
+  assert.equal(f.card.needsCheck, false);
+  assert.equal(f.card.quote, '이상한 문자는 없었고 카드는 괜찮대요.');
+});
+
+test('긍정 유지: "스미싱 문자가 왔어요" → secondary yes', () => {
+  const f = fieldsOf('스미싱 문자가 왔어요.');
+  assert.equal(f.secondary.aiValue, 'yes');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.secondary_detail.aiValue, '스미싱 문자');
+});
+
+test('애매: "스미싱은 없었는데 어제 결제 문자가 왔어요" → unknown, 확인 필요, 상세 없음', () => {
+  const text = '스미싱은 없었는데 어제 결제 문자가 왔어요.';
+  const f = fieldsOf(text);
+  assert.equal(f.secondary.aiValue, 'unknown');
+  assert.equal(f.secondary.needsCheck, true);
+  assert.equal(f.secondary.quote, text);
+  assert.ok(!('secondary_detail' in f));
+});
+
+test('애매: 긍정 문장과 부정 문장이 같이 있으면 unknown, 확인 필요', () => {
+  const s = fieldsOf('스미싱 문자가 왔어요. 보이스피싱 전화는 없었어요.');
+  assert.equal(s.secondary.aiValue, 'unknown');
+  assert.equal(s.secondary.needsCheck, true);
+  assert.ok(!('secondary_detail' in s));
+  const c = fieldsOf('카드번호가 유출됐어요. 카드 정보는 유출되지 않았대요.');
+  assert.equal(c.card.aiValue, 'unknown');
+  assert.equal(c.card.needsCheck, true);
+});
+
+test('부정 범위: 다른 문장·다른 절의 부정은 무시', () => {
+  assert.equal(fieldsOf('스미싱 문자가 왔어요. 다른 문제는 없어요.').secondary.aiValue, 'yes');
+  const f = fieldsOf('스미싱 문자가 왔고 카드는 괜찮대요.');
+  assert.equal(f.secondary.aiValue, 'yes');
+  assert.equal(f.card.aiValue, 'no');
+});
+
+test('부정처럼 보이는 말은 부정이 아니다', () => {
+  for (const text of ['스미싱 문자가 끊임없이 왔어요.', '스미싱 문자가 적지 않게 왔어요.', '스미싱뿐만 아니라 보이스피싱도 왔어요.']) {
+    assert.equal(fieldsOf(text).secondary.aiValue, 'yes', text);
+  }
+});
+
 test('개인정보 유출이 아니면 type=null, 확인 필요', () => {
   const f = fieldsOf('△△ 쇼핑몰에서 산 물건이 불량이에요.');
   assert.equal(f.type.aiValue, null);

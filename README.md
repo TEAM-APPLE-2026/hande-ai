@@ -56,6 +56,7 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 
 - fields는 기본 6개가 항상 위 순서로 오고, 2차 피해 상세를 찾은 경우에만 맨 뒤에 `secondary_detail`이 붙는다. 상세가 없으면 이 필드는 결과에 없다(저장 함수는 null이면서 needsCheck=false인 필드를 거부한다). extract는 `userValue=null`, `source='ai'`로 채운다. 사용자가 고치면 화면에서 userValue와 source='user'만 바꾸고 aiValue · quote는 그대로 둔다.
 - **못 찾으면 aiValue=null, quote=null, needsCheck=true** (화면: "확인 필요"). `unknown`으로 찾은 값, 근거(quote)를 붙이지 못한 값도 needsCheck=true.
+- **secondary · card의 부정 판단**: 키워드와 같은 절의 가까운 부정 표현(안 왔 · 없었 · 않았 · 아니 · 못 받 · 괜찮 등)이 있으면 `no`. 다른 문장의 부정은 보지 않는다. 같은 글에 긍정과 부정이 함께 있으면 `unknown`, needsCheck=true. `yes`가 아니면 secondary_detail을 만들지 않는다.
 - **quote는 원문 안에 그대로 있는 문자열**(대개 근거 문장, 날짜·회사는 그 표현). 외부 공개하지 않음.
 - **warnings**: 주민등록번호 · 카드번호 · 계좌번호 모양의 숫자가 있으면 `['SENSITIVE_NUMBER']`. 번호 자체는 결과(aiValue · quote) 어디에도 넣지 않는다 — 번호가 섞인 문장은 quote를 짧은 표현으로 바꾸거나 null로 둔다. 전화번호(010-…, 02-…)와 날짜는 해당 없음.
 - 빈 글이면 `Error('EMPTY_TEXT')`, 2000자 넘으면 `Error('TEXT_TOO_LONG')` (analyze에서는 INVALID_INPUT).

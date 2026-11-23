@@ -18,6 +18,12 @@
         "leaked": ["연락처"], "secondary": "unknown", "card": null } },
     { "text": "△△ 은행 앱에서 제 명의로 모르는 대출이 생겼어요. 명의 도용 같아요.",
       "expect": { "company": "△△ 은행", "type": null, "notice_date": null, "leaked": null, "secondary": "yes", "card": null } },
+    { "text": "10월 5일에 △△ 통신사에서 이름과 주소가 유출됐다는 안내 문자를 받았어요. 스미싱 문자는 안 왔어요.",
+      "expect": { "company": "△△ 통신사", "type": "privacy_leak", "notice_date": { "from": "2026-10-05", "to": "2026-10-05", "precision": "day" },
+        "leaked": ["이름", "주소"], "secondary": "no", "card": null } },
+    { "text": "9월에 ○○ 쇼핑몰 해킹 공지를 봤어요. 이메일 주소가 유출됐대요. 이상한 문자는 없었고 카드는 괜찮대요.",
+      "expect": { "company": "○○ 쇼핑몰", "type": "privacy_leak", "notice_date": { "from": "2026-09-01", "to": "2026-09-30", "precision": "month" },
+        "leaked": ["이메일"], "secondary": "no", "card": "no" } },
     { "text": "오늘 날씨가 좋네요.",
       "expect": { "company": null, "type": null, "notice_date": null, "leaked": null, "secondary": null, "card": null } }
   ]
