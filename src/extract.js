@@ -1,7 +1,9 @@
 // 피해 글 → ReportField[] (integration-contract.md 4장)
 // 규칙: 값마다 원문 근거(quote)를 붙이고, 못 찾으면 추측하지 않고 aiValue=null, needsCheck=true
+// secondary · card는 하이브리드: 키워드 규칙이 답을 내면 규칙 값, 키워드가 없으면 문장 단위 분류 모델(classify.js)
 import { parseNoticeDate } from './date.js';
 import { findSensitive, overlaps } from './sensitive.js';
+import { getClassifier, MODEL_THRESHOLD } from './classify.js';
 
 export const FIELD_KEYS = ['company', 'type', 'notice_date', 'leaked', 'secondary', 'card'];
 export const OPTIONAL_FIELD_KEYS = ['secondary_detail']; // 찾았을 때만 결과에 넣는다
@@ -25,7 +27,8 @@ export const LEAKED_ORDER = ['이름', '연락처', '전화번호', '주소', '�
 const LEAK_WORD = /유출|해킹|털렸|털린|새어\s?나|노출/;
 
 // 부정 표현. "끊임없이", "적지 않게", "뿐만 아니라"처럼 실제로는 부정이 아닌 말은 뺀다.
-const NEGATION = /안\s?(?:왔|옴|와|받|당)|아직\s?안|(?<!끊임|어이|정신|틀림|빠짐|쉴\s?새\s?)없|(?<!적지\s?|끊이지\s?|멈추지\s?)않|아니(?!라|나)|못\s?받|괜찮/;
+// "한두 번이 아니게", "한 번이 아니", "하루 이틀이 아니"는 '여러 번'이라는 긍정이다.
+const NEGATION = /안\s?(?:왔|옴|와|받|당)|아직\s?안|(?<!끊임|어이|정신|틀림|빠짐|쉴\s?새\s?)없|(?<!적지\s?|끊이지\s?|멈추지\s?)않|(?<!(?:한두|한|두세|몇)\s?(?:번|차례|건)이\s?|하루\s?이틀이\s?)아니(?!라|나)|못\s?받|괜찮/;
 // 절 경계: "없었는데", "왔지만", "없었고 ", "왔어요, "
 const CLAUSE_END = /는데|지만|(?<=[요다고])[,，]|(?<=[었았였왔갔됐했오받않없])고(?=[\s,，])/g;
 const NEAR_BEFORE = 12, NEAR_AFTER = 20; // 키워드 앞뒤로 부정을 찾는 거리(글자)
@@ -52,7 +55,8 @@ const KOREAN_COUNT = { 한: 1, 두: 2, 세: 3, 네: 4, 다섯: 5, 여섯: 6, 일
 const CARD_RULE = {
   word: /카드\s?(?:정보|번호)|카드(?:는|은|도|가)(?=\s|$)/g, // "카드사"는 키워드가 아니다
   yes: /카드\s?(?:정보|번호)/,
-  no: new RegExp(`${NEGATION.source}|유출\\s?안|포함\\s?안|안전`),
+  // "대상에서 빠졌대요", "제외됐대요", "포함되지 않았대요", "안 나갔대요". "빠져나갔어요"(새어 나감)는 부정이 아니다.
+  no: new RegExp(`${NEGATION.source}|유출\\s?안|포함\\s?안|포함\\s?되지\\s?않|안전|빠졌|제외|대상이?\\s?아니|안\\s?(?:나갔|나가|털렸|털리|새어)`),
   unknown: /모르|모름|확인\s?중/
 };
 
@@ -204,22 +208,61 @@ const RULES = {
 };
 
 /**
+ * 키워드가 없을 때 문장마다 모델을 돌린다. yes/no로 본 문장 중 가장 확신 높은 문장이 근거(quote).
+ * - 그 확률이 threshold 미만이면 unknown + 확인 필요
+ * - 기준 이상의 yes 문장과 no 문장이 함께 있으면 규칙과 같이 unknown + 확인 필요
+ * - yes/no로 본 문장이 없으면 null(못 찾음)
+ */
+function modelJudge(clf, key, sents, ranges, threshold) {
+  let best = null;
+  const sure = new Set();
+  for (const s of sents) {
+    const p = clf.predict(key, s.text);
+    for (const label of ['yes', 'no']) {
+      const others = Object.entries(p).filter(([k]) => k !== label).map(([, v]) => v);
+      if (!(p[label] > Math.max(...others))) continue; // 이 문장의 1등이 label일 때만
+      if (p[label] >= threshold) sure.add(label);
+      if (!best || p[label] > best.prob) best = { label, prob: p[label], sentence: s };
+    }
+  }
+  if (!best) return null;
+  const quote = makeQuote(best.sentence, null, 0, ranges);
+  if (best.prob < threshold || sure.size > 1) return { value: 'unknown', quote, needsCheck: true };
+  return { value: best.label, quote, needsCheck: false };
+}
+
+/** 규칙이 키워드로 yes/no/unknown을 냈으면 규칙 값. 아니면 모델. 모델 오류는 규칙 결과로 돌아간다. */
+function hybridJudge(rule, clf, key, sents, ranges, threshold) {
+  if (rule || !clf) return rule;
+  try {
+    return modelJudge(clf, key, sents, ranges, threshold);
+  } catch {
+    return rule;
+  }
+}
+
+/**
  * @typedef {'company'|'type'|'notice_date'|'leaked'|'secondary'|'card'|'secondary_detail'} FieldKey
  * @typedef {string|string[]|{from:string,to:string,precision:'day'|'month'|'year'}} FieldValue
  * @typedef {{key:FieldKey, aiValue:FieldValue|null, quote:string|null, userValue:FieldValue|null, source:'ai'|'user', needsCheck:boolean}} ReportField
  *
  * @param {string} text 사용자가 쓴 피해 글 (1~2000자)
- * @param {{now?: Date}} [options] now: 연도 없는 날짜의 기준 (기본: 오늘)
+ * @param {{now?: Date, classifier?: object|null, modelThreshold?: number}} [options]
+ *   now: 연도 없는 날짜의 기준 (기본: 오늘)
+ *   classifier: 분류 모델 JSON (기본: 내장 src/models/classifier.js). null이면 규칙만. 모양이 틀리면 규칙만.
+ *   modelThreshold: 모델 확신 기준 (기본 MODEL_THRESHOLD, 실험용)
  * @returns {{ fields: ReportField[], warnings: string[] }}
  */
-export function extract(text, { now = new Date() } = {}) {
+export function extract(text, { now = new Date(), classifier, modelThreshold = MODEL_THRESHOLD } = {}) {
   if (typeof text !== 'string' || !text.trim()) throw new Error('EMPTY_TEXT');
   if (text.length > MAX_TEXT_LENGTH) throw new Error('TEXT_TOO_LONG');
 
   const ranges = findSensitive(text);
   const sents = sentences(text);
+  const clf = classifier === null ? null : getClassifier(classifier);
   const toField = (key) => {
-    const r = RULES[key](text, ranges, sents, now);
+    let r = RULES[key](text, ranges, sents, now);
+    if (key === 'secondary' || key === 'card') r = hybridJudge(r, clf, key, sents, ranges, modelThreshold);
     const aiValue = r?.value ?? null;
     const quote = aiValue === null ? null : (r.quote ?? null);
     return {
