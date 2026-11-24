@@ -10,6 +10,8 @@ HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(mat
 ## 구조
 ```
 src/        extract.js · date.js · sensitive.js · match.js · draft.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
+src/models/ 내보낸 분류 모델 (classifier.json, 실험 중)
+data/       분류 모델용 [예시] 데이터
 test/       단위 테스트 (npm test)
 eval/       정확도 평가 데이터 · 스크립트 (npm run eval)
 experiments/ 모델 실험 기록 (채택한 것만 src로)
@@ -148,6 +150,15 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 | 추천 결과 없음 | match()가 [] 반환 |
 | 새 그룹 초안 · 확인 필요 | draftGroup()의 needsCheck에 있는 키 |
 | 회사 입력 필요 | draftGroup()이 `{ error: 'COMPANY_REQUIRED' }` 반환 |
+
+## 실험 (experiments)
+secondary · card 판단을 규칙 대신 작은 분류 모델(TF-IDF 글자 n-gram + 로지스틱 회귀)로 할 수 있는지 비교한다. 아직 `src`에서 쓰지 않는다.
+```bash
+pip install -r experiments/classifier/requirements.txt
+python experiments/classifier/make_data.py   # [예시] 데이터 → data/classifier/{train,val,test}.json
+python experiments/classifier/train.py       # 학습 · 규칙과 비교 → REPORT.md, src/models/classifier.json, parity.json
+```
+결과는 `experiments/classifier/REPORT.md`. 규칙 쪽 비교에는 node가 필요하다(`experiments/classifier/rules.mjs`).
 
 ## 버전 올리기
 ```bash
