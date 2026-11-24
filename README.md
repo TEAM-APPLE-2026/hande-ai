@@ -20,9 +20,10 @@ experiments/ 모델 실험 기록 (채택한 것만 src로)
 ## v0.4.0 변경사항
 - **새 그룹 만들기 AI 초안 `draftGroup(report)`** (R-06): 정리 결과로 backend `create_group` 인자 초안을 만든다. 아래 "draftGroup" 참고.
 - **secondary · card 하이브리드 판단**: 키워드 규칙이 답을 못 내는 문장은 브라우저 안의 작은 분류 모델(`src/models/classifier.json`)이 판단한다. 출력 모양(ReportField)과 secondary_detail 규칙은 그대로. 아래 "모델" 참고.
+- **"한두 번이 아니게" · "한 번이 아니" · "하루 이틀이 아니"는 부정이 아님**: 규칙이 `no`로 보던 것을 고쳤다(키워드가 있으면 `yes`).
 - **card 부정 표현 추가**: "대상에서 빠졌대요" · "제외됐대요" · "포함되지 않았대요" · "대상이 아니래요" · "안 나갔대요"는 `no` ("빠져나갔대요"는 `yes`).
 - extract 옵션 `classifier`(null이면 규칙만), `modelThreshold`(실험용) 추가.
-- 패키지 크기: 모델 파일 약 210KB가 추가된다. JSON을 `import … with { type: 'json' }`로 읽으므로 Node 20.10 이상, 번들러는 JSON import를 지원해야 한다(Vite · webpack 5 기본 지원).
+- 패키지 크기: 모델이 `src/models/classifier.js`(브라우저가 import하는 ES 모듈)와 `classifier.json`(같은 내용의 원본)으로 약 210KB씩 추가된다. 보통 ES 모듈이라 import attributes나 번들러의 JSON 설정이 필요 없다.
 
 ### 프론트 안내 (v0.3.0 → v0.4.0)
 - **draftGroup 결과의 `needsCheck`는 화면 표시용이다. backend `createGroup` 호출 전에 빼고**, `reportId`(필요하면 goal · deadline)를 붙여서 보낸다.
@@ -172,15 +173,15 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 
   | 항목 | 규칙 | 모델 | 하이브리드 |
   |---|---:|---:|---:|
-  | secondary 정확도 / macro F1 | 47.1% / 0.387 | 79.3% / 0.786 | 77.0% / 0.771 |
+  | secondary 정확도 / macro F1 | 47.1% / 0.398 | 79.3% / 0.786 | 80.5% / 0.803 |
   | card 정확도 / macro F1 | 82.8% / 0.721 | 89.7% / 0.898 | 90.8% / 0.912 |
 
   `eval/cases.json` 52개 글: secondary 34 → 52개, card 48 → 51개 맞음(v0.3.0 → v0.4.0). 자세한 표 · 혼동행렬 · 틀린 예: `experiments/classifier/REPORT.md`.
 - **한계**:
   - 합성 문장이라 실제 글의 말투 · 오타 · 긴 문장에서는 성능이 더 낮을 수 있다. 평가 데이터는 대부분의 라벨 조합이 씨앗 1개뿐이라 수치의 흔들림이 크다.
   - 규칙 버그 일부와 "일반 유출 문장을 card=yes로 보는" 데이터 문제는 평가 · eval 데이터를 보고 고쳤다. 그만큼 그 수치는 낙관적이다.
-  - 규칙이 틀린 값을 확실하다고 내면 하이브리드도 따라간다(예: "한두 번이 아니게 왔어요"를 규칙이 no로 봄).
-  - "재발급 안내는 안 왔어요"처럼 card와 관계없다고 정한 문장을 모델이 yes로 보기도 한다.
+  - 규칙이 틀린 값을 확실하다고 내면 하이브리드도 그 값을 따른다. ("한두 번이 아니게" · "하루 이틀이 아니" · "한 번이 아니"를 부정으로 보던 버그는 v0.4.0에서 고쳤다.)
+  - **"재발급 안내는 안 왔어요" · "카드사 재발급 연락은 없었어요"를 모델이 card=yes로 본다.** 검수에서 card=none(재발급 안내가 없다는 건 카드가 안전하다는 뜻이 아님)으로 정했지만, 학습 데이터에서 '재발급'이 대부분 card=yes 문장에 나와서 모델이 '재발급'을 카드 유출 신호로 배웠다. 규칙 키워드가 없는 문장이라 하이브리드에서도 yes가 나오고 needsCheck=false다. 다음 학습 때 '재발급'이 들어간 card=none 씨앗을 늘려야 한다.
   - 모델은 "모르겠다"(unknown)를 배우지 않았다. unknown은 규칙(모르 · 확인 중)과 기준값이 맡는다.
   - 모델 값의 확인 필요는 기준값으로만 정한다. 모델이 틀렸는데 확신하면 needsCheck=false로 나온다.
 

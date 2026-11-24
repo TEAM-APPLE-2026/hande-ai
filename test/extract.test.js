@@ -167,6 +167,22 @@ test('부정처럼 보이는 말은 부정이 아니다', () => {
   }
 });
 
+test('"한두 번이 아니게" · "한 번이 아니" · "하루 이틀이 아니"는 긍정(yes) — 규칙만으로', () => {
+  const rule = (text, key = 'secondary') => extract(text, { now: NOW, classifier: null }).fields.find((f) => f.key === key);
+  for (const text of ['스미싱 문자가 한두 번이 아니게 왔어요.', '스미싱 문자가 한두번이 아니에요.', '보이스피싱 전화가 한 번이 아니었어요.',
+    '스미싱 문자가 온 게 하루 이틀이 아니에요.', '사칭 문자가 몇 번이 아니에요.', '스팸 문자가 두세 차례가 아니라 계속 와요.']) {
+    const f = rule(text);
+    assert.equal(f.aiValue, 'yes', text);
+    assert.equal(f.needsCheck, false, text);
+  }
+  assert.equal(rule('카드번호가 유출된 게 한 번이 아니에요.', 'card').aiValue, 'yes');
+  // 진짜 부정은 그대로 no
+  assert.equal(rule('스미싱 문자는 아니었어요.').aiValue, 'no');
+  assert.equal(rule('보이스피싱 전화는 한 번도 안 왔어요.').aiValue, 'no');
+  // 하이브리드: 키워드 없는 "이상한 문자가 한두 번이 아니게"도 no가 아니다
+  assert.notEqual(fieldsOf('이상한 문자가 한두 번이 아니게 왔어요.').secondary.aiValue, 'no');
+});
+
 test('카드 부정: "빠졌" · "제외" · "포함되지 않" · "대상이 아니" · "안 나갔" → card no (규칙)', () => {
   const card = (text) => extract(text, { now: NOW, classifier: null }).fields.find((f) => f.key === 'card');
   for (const text of ['카드 정보는 이번 유출 대상에서 빠졌대요.', '카드번호는 유출 대상에서 제외됐대요.',

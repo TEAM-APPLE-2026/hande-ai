@@ -4,7 +4,7 @@
 - 분류기는 secondary, card를 따로 학습한다.
 - 검증 데이터로 C(0.3, 1, 3, 10, 30, 100)를 고르고(macro F1), 학습 데이터로만 학습한 그 모델을 평가 데이터로 잰다.
 - 같은 평가 문장에 현재 규칙(src/extract.js, 모델 끔)을 node로 돌려 비교한다. 규칙의 unknown은 따로 센다.
-- 결과: experiments/classifier/REPORT.md, src/models/classifier.json, experiments/classifier/parity.json
+- 결과: experiments/classifier/REPORT.md, src/models/classifier.json · classifier.js(같은 내용의 ES 모듈), experiments/classifier/parity.json
   (REPORT.md의 <!-- hybrid:start --> ~ <!-- hybrid:end --> 구역은 hybrid.mjs가 쓰므로 그대로 둔다)
 
 실행: python experiments/classifier/train.py   (먼저 make_data.py로 data/classifier/*.json을 만든다)
@@ -27,6 +27,8 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 DATA = ROOT / 'data' / 'classifier'
 MODEL_OUT = ROOT / 'src' / 'models' / 'classifier.json'
+# 브라우저 · Node가 import attributes 없이 읽도록 같은 내용을 ES 모듈로도 쓴다 (src/classify.js가 이것을 import)
+MODEL_JS_OUT = ROOT / 'src' / 'models' / 'classifier.js'
 REPORT_OUT = HERE / 'REPORT.md'
 PARITY_OUT = HERE / 'parity.json'
 HYBRID_START, HYBRID_END = '<!-- hybrid:start -->', '<!-- hybrid:end -->'
@@ -202,21 +204,26 @@ def main():
 
     model_metrics = {t: metrics([x[t] for x in test], test_pred[t], LABELS) for t in TARGETS}
 
-    rules = run_rules(DATA / 'test.json')
-    rule_pred = {t: [rules[x['id']][t] for x in test] for t in TARGETS}
-    rule_metrics = {t: metrics([x[t] for x in test], rule_pred[t], RULE_LABELS) for t in TARGETS}
-
     # 내보내기 + 내보낸 값만으로 다시 계산해서 sklearn과 비교
+    # (규칙 비교보다 먼저: rules.mjs가 src를 불러오면 src/models/classifier.js가 있어야 한다)
     model_json = export(vec, clfs, chosen, sizes, model_metrics)
     MODEL_OUT.parent.mkdir(parents=True, exist_ok=True)
-    MODEL_OUT.write_text(json.dumps(model_json, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    compact = json.dumps(model_json, ensure_ascii=False, separators=(',', ':'))
+    MODEL_OUT.write_text(compact, encoding='utf-8')
+    MODEL_JS_OUT.write_text('// 자동 생성: experiments/classifier/train.py — 직접 고치지 말 것 (classifier.json과 같은 내용)\n'
+                            f'export default {compact};\n', encoding='utf-8')
     model_bytes = MODEL_OUT.stat().st_size
+    model_js_bytes = MODEL_JS_OUT.stat().st_size
     max_diff = 0.0
     for t in TARGETS:
         for i, x in enumerate(test):
             p = predict_from_export(model_json, t, x['text'])
             max_diff = max(max_diff, float(np.max(np.abs(np.array(p) - test_proba[t][i]))))
     assert max_diff < 1e-4, f'내보낸 모델과 sklearn 확률 차이가 큼: {max_diff}'
+
+    rules = run_rules(DATA / 'test.json')
+    rule_pred = {t: [rules[x['id']][t] for x in test] for t in TARGETS}
+    rule_metrics = {t: metrics([x[t] for x in test], rule_pred[t], RULE_LABELS) for t in TARGETS}
 
     # parity: 평가 문장 30개, 내보낸 JSON으로 계산한 확률 (JS가 1e-6 안에서 같은 값을 내야 함)
     picked = random.Random(PARITY_SEED).sample(test, PARITY_N)
@@ -236,12 +243,12 @@ def main():
     PARITY_OUT.write_text(json.dumps(parity, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
 
     write_report(sizes, search, chosen, rule_metrics, model_metrics, test, rule_pred, test_pred,
-                 vec_seconds, search_seconds, fit_seconds, model_bytes, max_diff, model_json)
-    print_summary(search, chosen, rule_metrics, model_metrics, fit_seconds, model_bytes)
+                 vec_seconds, search_seconds, fit_seconds, model_bytes, model_js_bytes, max_diff, model_json)
+    print_summary(search, chosen, rule_metrics, model_metrics, fit_seconds, model_js_bytes)
 
 
 def write_report(sizes, search, chosen, rule_m, model_m, test, rule_pred, model_pred,
-                 vec_seconds, search_seconds, fit_seconds, model_bytes, max_diff, model_json):
+                 vec_seconds, search_seconds, fit_seconds, model_bytes, model_js_bytes, max_diff, model_json):
     old = REPORT_OUT.read_text(encoding='utf-8') if REPORT_OUT.exists() else ''
     hybrid = old[old.index(HYBRID_START):old.index(HYBRID_END) + len(HYBRID_END)] if HYBRID_START in old and HYBRID_END in old \
         else f'{HYBRID_START}\n(`node experiments/classifier/hybrid.mjs`를 실행하면 여기에 하이브리드 결과가 들어간다)\n{HYBRID_END}'
@@ -288,6 +295,7 @@ def write_report(sizes, search, chosen, rule_m, model_m, test, rule_pred, model_
             f"- C 고르기(2항목 × C {len(C_GRID)}개 학습 + 검증): {search_seconds:.2f}초",
             f"- 최종 학습: secondary {fit_seconds['secondary']:.3f}초 · card {fit_seconds['card']:.3f}초",
             f"- `src/models/classifier.json`: {model_bytes:,} bytes ({model_bytes / 1024:.0f} KB), 공유 어휘 {len(model_json['vocabulary']):,}개, 소수 {ROUND}자리",
+            f"- `src/models/classifier.js` (같은 내용의 ES 모듈, 브라우저가 import): {model_js_bytes:,} bytes ({model_js_bytes / 1024:.0f} KB)",
             f"- 내보낸 JSON만으로 다시 계산한 확률과 sklearn 확률의 최대 차이: {max_diff:.2e}",
             '',
             '## 다시 만들기', '', '```bash', 'pip install -r experiments/classifier/requirements.txt',
@@ -304,7 +312,7 @@ def print_summary(search, chosen, rule_m, model_m, fit_seconds, model_bytes):
     for t in TARGETS:
         r, m = rule_m[t], model_m[t]
         print(f"| {t} | {pct(r['accuracy'])} | {r['macro_f1']:.3f} | {r['unknown']} | {pct(m['accuracy'])} | {m['macro_f1']:.3f} | {chosen[t]} |")
-    print('학습 시간: ' + ', '.join(f'{t} {s:.3f}s' for t, s in fit_seconds.items()) + f' · 모델 {model_bytes:,} bytes')
+    print('학습 시간: ' + ', '.join(f'{t} {s:.3f}s' for t, s in fit_seconds.items()) + f' · classifier.js {model_bytes:,} bytes')
 
 
 if __name__ == '__main__':

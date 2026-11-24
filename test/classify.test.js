@@ -43,6 +43,17 @@ test('모델 파일: 어휘 · idf는 한 번만, 두 항목이 같이 씀', () 
   assert.ok([0.5, 0.6, 0.7].includes(MODEL_THRESHOLD));
 });
 
+test('classifier.js(브라우저가 import)와 classifier.json(원본)은 같은 내용', () => {
+  const json = JSON.parse(readFileSync(new URL('../src/models/classifier.json', import.meta.url), 'utf8'));
+  assert.deepEqual(BUNDLED_MODEL, json);
+});
+
+test('import attributes 없이 읽는다 (engines >=20)', () => {
+  const src = readFileSync(new URL('../src/classify.js', import.meta.url), 'utf8');
+  assert.ok(!/\bwith\s*\{\s*type/.test(src) && !/\bassert\s*\{\s*type/.test(src));
+  assert.match(src, /from '\.\/models\/classifier\.js'/);
+});
+
 test('모양이 틀린 모델은 INVALID_MODEL, getClassifier는 null', () => {
   for (const bad of [{}, { ...BUNDLED_MODEL, formatVersion: 1 }, { ...BUNDLED_MODEL, idf: [1, 2] }, { ...BUNDLED_MODEL, targets: {} }]) {
     assert.throws(() => loadClassifier(bad), /INVALID_MODEL/);
