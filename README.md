@@ -1,6 +1,6 @@
 # hande-ai
 
-HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(match)** · **로펌용 익명 요약(summarize)** 을 담당한다.
+HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(match)** · **새 그룹 초안(draftGroup)** · **로펌용 익명 요약(summarize)** 을 담당한다.
 서버 비용 없이 **브라우저에서 실행**되고, 프론트엔드가 이 패키지를 설치해서 쓴다.
 
 > 키 · 비밀번호 · 실제 피해자 글은 이 레포에 올리지 않음. 평가 데이터는 직접 만든 예시 문장만.
@@ -9,7 +9,7 @@ HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(mat
 
 ## 구조
 ```
-src/        extract.js · date.js · sensitive.js · match.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
+src/        extract.js · date.js · sensitive.js · match.js · draft.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
 test/       단위 테스트 (npm test)
 eval/       정확도 평가 데이터 · 스크립트 (npm run eval)
 experiments/ 모델 실험 기록 (채택한 것만 src로)
@@ -21,7 +21,7 @@ experiments/ 모델 실험 기록 (채택한 것만 src로)
 npm install github:TEAM-APPLE-2026/hande-ai#v0.3.0
 ```
 ```js
-import { analyze, extract, match, summarize } from '@team-apple/hande-ai';
+import { analyze, extract, match, draftGroup, summarize } from '@team-apple/hande-ai';
 
 // AI 정리 화면(#organize): 20초 제한 + 공통 응답 모양
 const r = await analyze(text);                 // { data: { fields, warnings } } | { error: { code, message } }
@@ -29,6 +29,13 @@ const r2 = await analyze(text, { groups });    // groups를 주면 data.candidat
 
 // 사용자가 고친 뒤 다시 찾기(#match)
 const found = match({ fields }, groups);
+
+// 새 그룹 만들기(R-06): create_group 인자 초안. needsCheck의 키는 화면에서 "확인 필요"로 표시
+const draft = draftGroup({ fields });           // { name, company, harmType, description, ... } | { error: 'COMPANY_REQUIRED' }
+if (!draft.error) {
+  const { needsCheck, ...input } = draft;        // needsCheck는 화면용. 보내기 전에 빼고 reportId를 붙인다
+  await createGroup({ reportId, ...input });
+}
 
 // 로펌 화면: get_group_stats 결과의 숫자만 사용
 const lines = summarize(stats);                // "\n"으로 이은 3~4줄
@@ -88,6 +95,31 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 - 빈 배열이면 화면: "비슷한 사건을 찾지 못했어요 → 새 그룹 만들기"
 - 점수는 참여 자격 · 권한의 근거가 아님(계약 4장).
 
+### draftGroup(report) → create_group 인자 초안 (R-06)
+- report: `{ fields: ReportField[] }`(또는 fields 배열), 사용자 수정 반영본. 값은 match와 같이 finalValue(source='user'면 userValue).
+- 결과(camelCase, 계약 3장 createGroup 입력과 같은 이름):
+```ts
+{ name: string; company: string; harmType: 'privacy_leak'; description: string; conditions: string;
+  periodStart: string | null; periodEnd: string | null; requiredEvidence: string[]; needsCheck: string[] }
+```
+| 키 | 규칙 | 예 |
+|---|---|---|
+| name | 1~100자. `회사 개인정보 유출 피해 모임 (YYYY.MM)`, 기간을 모르면 괄호 없음, year면 `(YYYY)`. 길면 회사 부분을 줄인다 | `"○○쇼핑 개인정보 유출 피해 모임 (2026.10)"` |
+| company | 1~200자. 없으면 초안 없이 `{ error: 'COMPANY_REQUIRED' }` | `"○○쇼핑"` |
+| harmType | 항상 `'privacy_leak'` | |
+| description | 1~2000자, 3문장: 유출 안내 시점 · 유출 항목(card=yes면 `카드 정보` 추가) · 2차 피해 여부 | |
+| conditions | 문자열 0~1000자, 참여 조건 2~4줄(`
+`) — 안내 받은 회사 · 시기(있으면) · 유출 항목(있으면) · 확인 자료 | |
+| periodStart / periodEnd | notice_date의 from / to. 날짜를 모르거나 형식이 틀리면 둘 다 null | `"2026-10-01"` / `"2026-10-31"` |
+| requiredEvidence | 최대 20개, 각 1~100자. `유출 안내 문자·메일 캡처` + secondary=yes면 `스미싱·이상 결제 문자 캡처` + card=yes면 `카드 재발급·결제 내역` | |
+| needsCheck | 확인이 필요한 초안 키 목록 (화면: "확인 필요") | `["periodStart","periodEnd"]` |
+
+- **needsCheck**: 값이 없거나 AI가 needsCheck=true로 둔 필드에서 만든 키를 넣는다. 사용자가 고친 필드(source='user')는 확인한 값으로 본다.
+  company → name · company · description · conditions / notice_date → name · description · conditions · periodStart · periodEnd / leaked → description · conditions / secondary · card → description · requiredEvidence
+- **개인정보를 넣지 않는다**: 원문 · quote · secondary_detail 같은 자유 글은 읽지 않는다. 회사 이름에서는 전화번호 · 이메일 · 민감 번호를 지우고(지웠으면 company 확인 필요), 유출 항목은 정해진 이름(extract의 leaked 목록)만 쓴다. 그 밖의 글자는 빼고 확인 필요로 표시.
+- `needsCheck`는 백엔드로 보내지 않는다. reportId · goal · deadline은 프론트가 붙인다.
+- fields가 배열이 아니면 `TypeError('INVALID_REPORT')`.
+
 ### summarize(stats) → string (3~4줄, `\n`으로 구분)
 - stats: 계약 5장 익명 집계. **숫자 항목만 읽는다**: memberCount(필수), secondaryYesCount, secondaryKnownCount, secondaryUnknownCount, secondaryRatio, evidenceHolderCount, evidenceRatio. 다른 키(groupId, asOf, 그 밖의 글자)는 읽지 않으므로 원문 · 이름 · 연락처가 요약에 들어갈 수 없다.
 - 숫자 자리에 숫자가 아닌 값, 음수, 1 넘는 비율이 오면 `TypeError('INVALID_STATS: …')`.
@@ -114,6 +146,8 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 | 민감 번호 경고 | `warnings`에 SENSITIVE_NUMBER |
 | 확인 필요 | field.needsCheck=true |
 | 추천 결과 없음 | match()가 [] 반환 |
+| 새 그룹 초안 · 확인 필요 | draftGroup()의 needsCheck에 있는 키 |
+| 회사 입력 필요 | draftGroup()이 `{ error: 'COMPANY_REQUIRED' }` 반환 |
 
 ## 버전 올리기
 ```bash
