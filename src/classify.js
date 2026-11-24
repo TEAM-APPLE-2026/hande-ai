@@ -1,6 +1,6 @@
 // secondary · card 분류 모델(브라우저에서 실행). src/models/classifier.js만 쓰고 네트워크 요청은 하지 않는다.
 // 전처리는 sklearn TfidfVectorizer(analyzer='char_wb')와 같다 — experiments/classifier/train.py의 char_wb_ngrams 참고.
-// classifier.js는 train.py가 classifier.json과 같은 내용으로 만든 ES 모듈 (import attributes가 필요 없다)
+// classifier.js는 train.py가 experiments/classifier/classifier.json과 같은 내용으로 만든 ES 모듈 (import attributes가 필요 없다)
 import bundled from './models/classifier.js';
 
 export const CLASSIFIER_TARGETS = ['secondary', 'card'];
@@ -32,7 +32,7 @@ export function charWbNgrams(text, lo, hi) {
 const isNumArray = (a, n) => Array.isArray(a) && (n === undefined || a.length === n) && a.every((v) => typeof v === 'number' && Number.isFinite(v));
 
 /**
- * classifier.json → 예측기. 모양이 틀리면 Error('INVALID_MODEL').
+ * 모델 객체(classifier.js의 default export와 같은 모양) → 예측기. 모양이 틀리면 Error('INVALID_MODEL').
  * @returns {{ predict(target: 'secondary'|'card', text: string): Record<string, number> }}
  */
 export function loadClassifier(json) {

@@ -44,7 +44,7 @@ test('모델 파일: 어휘 · idf는 한 번만, 두 항목이 같이 씀', () 
 });
 
 test('classifier.js(브라우저가 import)와 classifier.json(원본)은 같은 내용', () => {
-  const json = JSON.parse(readFileSync(new URL('../src/models/classifier.json', import.meta.url), 'utf8'));
+  const json = JSON.parse(readFileSync(new URL('../experiments/classifier/classifier.json', import.meta.url), 'utf8'));
   assert.deepEqual(BUNDLED_MODEL, json);
 });
 

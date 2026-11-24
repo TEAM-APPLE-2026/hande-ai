@@ -10,7 +10,7 @@ HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(mat
 ## 구조
 ```
 src/        extract.js · date.js · sensitive.js · classify.js · match.js · draft.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
-src/models/ 분류 모델 classifier.json (secondary · card, extract가 사용)
+src/models/ 분류 모델 classifier.js (secondary · card, extract가 사용. 학습 스크립트가 만든다)
 data/       분류 모델용 [예시] 데이터
 test/       단위 테스트 (npm test)
 eval/       정확도 평가 데이터 · 스크립트 (npm run eval)
@@ -19,11 +19,11 @@ experiments/ 모델 실험 기록 (채택한 것만 src로)
 
 ## v0.4.0 변경사항
 - **새 그룹 만들기 AI 초안 `draftGroup(report)`** (R-06): 정리 결과로 backend `create_group` 인자 초안을 만든다. 아래 "draftGroup" 참고.
-- **secondary · card 하이브리드 판단**: 키워드 규칙이 답을 못 내는 문장은 브라우저 안의 작은 분류 모델(`src/models/classifier.json`)이 판단한다. 출력 모양(ReportField)과 secondary_detail 규칙은 그대로. 아래 "모델" 참고.
+- **secondary · card 하이브리드 판단**: 키워드 규칙이 답을 못 내는 문장은 브라우저 안의 작은 분류 모델(`src/models/classifier.js`)이 판단한다. 출력 모양(ReportField)과 secondary_detail 규칙은 그대로. 아래 "모델" 참고.
 - **"한두 번이 아니게" · "한 번이 아니" · "하루 이틀이 아니"는 부정이 아님**: 규칙이 `no`로 보던 것을 고쳤다(키워드가 있으면 `yes`).
 - **card 부정 표현 추가**: "대상에서 빠졌대요" · "제외됐대요" · "포함되지 않았대요" · "대상이 아니래요" · "안 나갔대요"는 `no` ("빠져나갔대요"는 `yes`).
 - extract 옵션 `classifier`(null이면 규칙만), `modelThreshold`(실험용) 추가.
-- 패키지 크기: 모델이 `src/models/classifier.js`(브라우저가 import하는 ES 모듈)와 `classifier.json`(같은 내용의 원본)으로 약 210KB씩 추가된다. 보통 ES 모듈이라 import attributes나 번들러의 JSON 설정이 필요 없다.
+- 패키지 크기: 모델 `src/models/classifier.js`(브라우저가 import하는 ES 모듈) 약 210KB가 추가된다. 같은 내용의 원본 `experiments/classifier/classifier.json`은 패키지에 들어가지 않는다. 보통 ES 모듈이라 import attributes나 번들러의 JSON 설정이 필요 없다.
 
 ### 프론트 안내 (v0.3.0 → v0.4.0)
 - **draftGroup 결과의 `needsCheck`는 화면 표시용이다. backend `createGroup` 호출 전에 빼고**, `reportId`(필요하면 goal · deadline)를 붙여서 보낸다.
@@ -190,7 +190,7 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 ```bash
 pip install -r experiments/classifier/requirements.txt
 python experiments/classifier/make_data.py   # [예시] 데이터 → data/classifier/{train,val,test}.json
-python experiments/classifier/train.py       # 학습 · 규칙과 비교 → REPORT.md, src/models/classifier.json, parity.json
+python experiments/classifier/train.py       # 학습 · 규칙과 비교 → REPORT.md, classifier.json(원본) · src/models/classifier.js, parity.json
 node experiments/classifier/hybrid.mjs       # 기준값 고르기(검증) · 규칙/모델/하이브리드 · v0.3.0 비교 → REPORT.md
 ```
 결과는 `experiments/classifier/REPORT.md`. 규칙 쪽 비교에는 node가 필요하다(`experiments/classifier/rules.mjs`). 모델을 다시 만들면 `parity.json`도 바뀌므로 `npm test`로 JS와 같은지 확인한다.

@@ -1,5 +1,5 @@
 {
- "note": "[예시] 평가 문장. probs는 src/models/classifier.json만으로 계산한 값(classes 순서). JS 구현과 비교용.",
+ "note": "[예시] 평가 문장. probs는 내보낸 모델(experiments/classifier/classifier.json = src/models/classifier.js)만으로 계산한 값(classes 순서). JS 구현과 비교용.",
  "tolerance": 1e-06,
  "maxDiffVsSklearn": 4.5543693560912146e-07,
  "classes": {

@@ -4,7 +4,7 @@
 - 분류기는 secondary, card를 따로 학습한다.
 - 검증 데이터로 C(0.3, 1, 3, 10, 30, 100)를 고르고(macro F1), 학습 데이터로만 학습한 그 모델을 평가 데이터로 잰다.
 - 같은 평가 문장에 현재 규칙(src/extract.js, 모델 끔)을 node로 돌려 비교한다. 규칙의 unknown은 따로 센다.
-- 결과: experiments/classifier/REPORT.md, src/models/classifier.json · classifier.js(같은 내용의 ES 모듈), experiments/classifier/parity.json
+- 결과: experiments/classifier/REPORT.md, experiments/classifier/classifier.json(원본), src/models/classifier.js(같은 내용의 ES 모듈, 패키지에 들어감), experiments/classifier/parity.json
   (REPORT.md의 <!-- hybrid:start --> ~ <!-- hybrid:end --> 구역은 hybrid.mjs가 쓰므로 그대로 둔다)
 
 실행: python experiments/classifier/train.py   (먼저 make_data.py로 data/classifier/*.json을 만든다)
@@ -26,7 +26,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, precisio
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 DATA = ROOT / 'data' / 'classifier'
-MODEL_OUT = ROOT / 'src' / 'models' / 'classifier.json'
+MODEL_OUT = HERE / 'classifier.json'  # 원본(패키지에는 넣지 않음)
 # 브라우저 · Node가 import attributes 없이 읽도록 같은 내용을 ES 모듈로도 쓴다 (src/classify.js가 이것을 import)
 MODEL_JS_OUT = ROOT / 'src' / 'models' / 'classifier.js'
 REPORT_OUT = HERE / 'REPORT.md'
@@ -207,10 +207,10 @@ def main():
     # 내보내기 + 내보낸 값만으로 다시 계산해서 sklearn과 비교
     # (규칙 비교보다 먼저: rules.mjs가 src를 불러오면 src/models/classifier.js가 있어야 한다)
     model_json = export(vec, clfs, chosen, sizes, model_metrics)
-    MODEL_OUT.parent.mkdir(parents=True, exist_ok=True)
+    MODEL_JS_OUT.parent.mkdir(parents=True, exist_ok=True)
     compact = json.dumps(model_json, ensure_ascii=False, separators=(',', ':'))
     MODEL_OUT.write_text(compact, encoding='utf-8')
-    MODEL_JS_OUT.write_text('// 자동 생성: experiments/classifier/train.py — 직접 고치지 말 것 (classifier.json과 같은 내용)\n'
+    MODEL_JS_OUT.write_text('// 자동 생성: experiments/classifier/train.py — 직접 고치지 말 것 (experiments/classifier/classifier.json과 같은 내용)\n'
                             f'export default {compact};\n', encoding='utf-8')
     model_bytes = MODEL_OUT.stat().st_size
     model_js_bytes = MODEL_JS_OUT.stat().st_size
@@ -234,7 +234,7 @@ def main():
                 'pred': model_json['targets'][t]['classes'][int(np.argmax(p))]}
 
     parity = {
-        'note': '[예시] 평가 문장. probs는 src/models/classifier.json만으로 계산한 값(classes 순서). JS 구현과 비교용.',
+        'note': '[예시] 평가 문장. probs는 내보낸 모델(experiments/classifier/classifier.json = src/models/classifier.js)만으로 계산한 값(classes 순서). JS 구현과 비교용.',
         'tolerance': 1e-6,
         'maxDiffVsSklearn': max_diff,
         'classes': {t: model_json['targets'][t]['classes'] for t in TARGETS},
@@ -294,7 +294,7 @@ def write_report(sizes, search, chosen, rule_m, model_m, test, rule_pred, model_
             f"- 어휘 · idf 만들기(학습 문장 1회): {vec_seconds:.3f}초",
             f"- C 고르기(2항목 × C {len(C_GRID)}개 학습 + 검증): {search_seconds:.2f}초",
             f"- 최종 학습: secondary {fit_seconds['secondary']:.3f}초 · card {fit_seconds['card']:.3f}초",
-            f"- `src/models/classifier.json`: {model_bytes:,} bytes ({model_bytes / 1024:.0f} KB), 공유 어휘 {len(model_json['vocabulary']):,}개, 소수 {ROUND}자리",
+            f"- `experiments/classifier/classifier.json`(원본, 패키지 제외): {model_bytes:,} bytes ({model_bytes / 1024:.0f} KB), 공유 어휘 {len(model_json['vocabulary']):,}개, 소수 {ROUND}자리",
             f"- `src/models/classifier.js` (같은 내용의 ES 모듈, 브라우저가 import): {model_js_bytes:,} bytes ({model_js_bytes / 1024:.0f} KB)",
             f"- 내보낸 JSON만으로 다시 계산한 확률과 sklearn 확률의 최대 차이: {max_diff:.2e}",
             '',

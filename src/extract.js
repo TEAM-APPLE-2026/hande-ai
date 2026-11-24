@@ -249,7 +249,7 @@ function hybridJudge(rule, clf, key, sents, ranges, threshold) {
  * @param {string} text 사용자가 쓴 피해 글 (1~2000자)
  * @param {{now?: Date, classifier?: object|null, modelThreshold?: number}} [options]
  *   now: 연도 없는 날짜의 기준 (기본: 오늘)
- *   classifier: 분류 모델 JSON (기본: 내장 src/models/classifier.json). null이면 규칙만. 모양이 틀리면 규칙만.
+ *   classifier: 분류 모델 JSON (기본: 내장 src/models/classifier.js). null이면 규칙만. 모양이 틀리면 규칙만.
  *   modelThreshold: 모델 확신 기준 (기본 MODEL_THRESHOLD, 실험용)
  * @returns {{ fields: ReportField[], warnings: string[] }}
  */

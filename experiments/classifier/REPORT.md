@@ -203,10 +203,10 @@
 ## 학습 시간 · 모델 크기
 
 - 어휘 · idf 만들기(학습 문장 1회): 0.064초
-- C 고르기(2항목 × C 6개 학습 + 검증): 0.58초
-- 최종 학습: secondary 0.041초 · card 0.057초
-- `src/models/classifier.json`: 215,659 bytes (211 KB), 공유 어휘 2,629개, 소수 6자리
-- `src/models/classifier.js` (같은 내용의 ES 모듈, 브라우저가 import): 215,792 bytes (211 KB)
+- C 고르기(2항목 × C 6개 학습 + 검증): 0.72초
+- 최종 학습: secondary 0.053초 · card 0.071초
+- `experiments/classifier/classifier.json`(원본, 패키지 제외): 215,659 bytes (211 KB), 공유 어휘 2,629개, 소수 6자리
+- `src/models/classifier.js` (같은 내용의 ES 모듈, 브라우저가 import): 215,815 bytes (211 KB)
 - 내보낸 JSON만으로 다시 계산한 확률과 sklearn 확률의 최대 차이: 4.55e-07
 
 ## 다시 만들기
