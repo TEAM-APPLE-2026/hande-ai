@@ -9,18 +9,30 @@ HANDE의 AI 모듈. **피해 글 정리(extract)** · **같은 사건 찾기(mat
 
 ## 구조
 ```
-src/        extract.js · date.js · sensitive.js · match.js · draft.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
-src/models/ 내보낸 분류 모델 (classifier.json, 실험 중)
+src/        extract.js · date.js · sensitive.js · classify.js · match.js · draft.js · summarize.js · analyze.js · index.js (프론트는 index.js만 사용)
+src/models/ 분류 모델 classifier.json (secondary · card, extract가 사용)
 data/       분류 모델용 [예시] 데이터
 test/       단위 테스트 (npm test)
 eval/       정확도 평가 데이터 · 스크립트 (npm run eval)
 experiments/ 모델 실험 기록 (채택한 것만 src로)
 ```
 
+## v0.4.0 변경사항
+- **새 그룹 만들기 AI 초안 `draftGroup(report)`** (R-06): 정리 결과로 backend `create_group` 인자 초안을 만든다. 아래 "draftGroup" 참고.
+- **secondary · card 하이브리드 판단**: 키워드 규칙이 답을 못 내는 문장은 브라우저 안의 작은 분류 모델(`src/models/classifier.json`)이 판단한다. 출력 모양(ReportField)과 secondary_detail 규칙은 그대로. 아래 "모델" 참고.
+- **card 부정 표현 추가**: "대상에서 빠졌대요" · "제외됐대요" · "포함되지 않았대요" · "대상이 아니래요" · "안 나갔대요"는 `no` ("빠져나갔대요"는 `yes`).
+- extract 옵션 `classifier`(null이면 규칙만), `modelThreshold`(실험용) 추가.
+- 패키지 크기: 모델 파일 약 210KB가 추가된다. JSON을 `import … with { type: 'json' }`로 읽으므로 Node 20.10 이상, 번들러는 JSON import를 지원해야 한다(Vite · webpack 5 기본 지원).
+
+### 프론트 안내 (v0.3.0 → v0.4.0)
+- **draftGroup 결과의 `needsCheck`는 화면 표시용이다. backend `createGroup` 호출 전에 빼고**, `reportId`(필요하면 goal · deadline)를 붙여서 보낸다.
+- `{ error: 'COMPANY_REQUIRED' }`가 오면 초안 대신 회사 입력을 안내한다.
+- secondary · card는 키워드가 없어도 값이 채워질 수 있다. 모델이 자신 없으면 `unknown` + needsCheck=true이므로 지금처럼 "확인 필요"를 보여 주면 된다.
+
 ## 프론트엔드에서 쓰는 법
 ```bash
 # frontend 폴더에서 (버전 태그로 고정)
-npm install github:TEAM-APPLE-2026/hande-ai#v0.3.0
+npm install github:TEAM-APPLE-2026/hande-ai#v0.4.0
 ```
 ```js
 import { analyze, extract, match, draftGroup, summarize } from '@team-apple/hande-ai';
@@ -46,7 +58,7 @@ const lines = summarize(stats);                // "\n"으로 이은 3~4줄
 
 ## 약속(인터페이스) — 바꾸면 버전을 올리고 프론트 담당에게 알리기
 
-### extract(text, { now? }) → `{ fields: ReportField[], warnings: string[] }`
+### extract(text, { now?, classifier? }) → `{ fields: ReportField[], warnings: string[] }`
 ```ts
 type FieldKey = 'company' | 'type' | 'notice_date' | 'leaked' | 'secondary' | 'card' | 'secondary_detail';
 type FieldValue = string | string[] | { from: string; to: string; precision: 'day' | 'month' | 'year' };
@@ -65,7 +77,9 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 
 - fields는 기본 6개가 항상 위 순서로 오고, 2차 피해 상세를 찾은 경우에만 맨 뒤에 `secondary_detail`이 붙는다. 상세가 없으면 이 필드는 결과에 없다(저장 함수는 null이면서 needsCheck=false인 필드를 거부한다). extract는 `userValue=null`, `source='ai'`로 채운다. 사용자가 고치면 화면에서 userValue와 source='user'만 바꾸고 aiValue · quote는 그대로 둔다.
 - **못 찾으면 aiValue=null, quote=null, needsCheck=true** (화면: "확인 필요"). `unknown`으로 찾은 값, 근거(quote)를 붙이지 못한 값도 needsCheck=true.
-- **secondary · card의 부정 판단**: 키워드와 같은 절의 가까운 부정 표현(안 왔 · 없었 · 않았 · 아니 · 못 받 · 괜찮 등)이 있으면 `no`. 다른 문장의 부정은 보지 않는다. 같은 글에 긍정과 부정이 함께 있으면 `unknown`, needsCheck=true. `yes`가 아니면 secondary_detail을 만들지 않는다.
+- **secondary · card의 부정 판단**: 키워드와 같은 절의 가까운 부정 표현(안 왔 · 없었 · 않았 · 아니 · 못 받 · 괜찮 등, card는 빠졌 · 제외 · 포함되지 않 · 대상이 아니 · 안 나갔도)이 있으면 `no`. 다른 문장의 부정은 보지 않는다. 같은 글에 긍정과 부정이 함께 있으면 `unknown`, needsCheck=true. `yes`가 아니면 secondary_detail을 만들지 않는다.
+- **secondary · card 하이브리드**(v0.4.0): ① 키워드 규칙이 yes / no / unknown을 내면 규칙 값. ② 키워드가 없으면 문장마다 모델을 돌려, yes · no로 본 문장 중 가장 확신 높은 문장을 근거(quote, 원문 부분 문자열)로 쓴다. ③ 그 확률이 기준값(`MODEL_THRESHOLD` = 0.5) 미만이거나 확신 있는 yes 문장과 no 문장이 함께 있으면 `unknown` + needsCheck=true. ④ 모든 문장이 관계없음이면 null(찾지 못함). ⑤ 모델 준비 · 계산 오류는 규칙 결과로 돌아간다. 네트워크 요청은 없다.
+- 옵션: `classifier` — 분류 모델 JSON(기본: 내장). `null`이면 규칙만 쓴다(v0.3.0과 같은 판단 + card 부정 표현 추가분).
 - **quote는 원문 안에 그대로 있는 문자열**(대개 근거 문장, 날짜·회사는 그 표현). 외부 공개하지 않음.
 - **warnings**: 주민등록번호 · 카드번호 · 계좌번호 모양의 숫자가 있으면 `['SENSITIVE_NUMBER']`. 번호 자체는 결과(aiValue · quote) 어디에도 넣지 않는다 — 번호가 섞인 문장은 quote를 짧은 표현으로 바꾸거나 null로 둔다. 전화번호(010-…, 02-…)와 날짜는 해당 없음.
 - 빈 글이면 `Error('EMPTY_TEXT')`, 2000자 넘으면 `Error('TEXT_TOO_LONG')` (analyze에서는 INVALID_INPUT).
@@ -151,17 +165,37 @@ type ReportField = { key: FieldKey; aiValue: FieldValue | null; quote: string | 
 | 새 그룹 초안 · 확인 필요 | draftGroup()의 needsCheck에 있는 키 |
 | 회사 입력 필요 | draftGroup()이 `{ error: 'COMPANY_REQUIRED' }` 반환 |
 
+## 모델 (secondary · card 분류)
+- **구조**: TF-IDF 글자 n-gram(char_wb, 2~4글자, 어휘 · idf 공유) + 로지스틱 회귀, 항목마다 클래스 `yes / no / none`. `src/classify.js`가 sklearn과 같은 전처리로 브라우저에서 계산한다(Python 결과와 1e-6 이내, `test/classify.test.js`).
+- **데이터**: 직접 만든 **합성 [예시] 문장**뿐이다(씨앗 84개 → 591문장, `data/classifier`). 실제 피해자 글 · 실제 회사 이름 · 개인정보는 쓰지 않았다. 같은 씨앗의 변형은 학습 · 검증 · 평가 중 한쪽에만 넣었다. C와 기준값은 검증 데이터로 골랐다.
+- **성능** (평가 데이터 87문장, 문장 단위 · unknown은 틀린 것으로 셈):
+
+  | 항목 | 규칙 | 모델 | 하이브리드 |
+  |---|---:|---:|---:|
+  | secondary 정확도 / macro F1 | 47.1% / 0.387 | 79.3% / 0.786 | 77.0% / 0.771 |
+  | card 정확도 / macro F1 | 82.8% / 0.721 | 89.7% / 0.898 | 90.8% / 0.912 |
+
+  `eval/cases.json` 52개 글: secondary 34 → 52개, card 48 → 51개 맞음(v0.3.0 → v0.4.0). 자세한 표 · 혼동행렬 · 틀린 예: `experiments/classifier/REPORT.md`.
+- **한계**:
+  - 합성 문장이라 실제 글의 말투 · 오타 · 긴 문장에서는 성능이 더 낮을 수 있다. 평가 데이터는 대부분의 라벨 조합이 씨앗 1개뿐이라 수치의 흔들림이 크다.
+  - 규칙 버그 일부와 "일반 유출 문장을 card=yes로 보는" 데이터 문제는 평가 · eval 데이터를 보고 고쳤다. 그만큼 그 수치는 낙관적이다.
+  - 규칙이 틀린 값을 확실하다고 내면 하이브리드도 따라간다(예: "한두 번이 아니게 왔어요"를 규칙이 no로 봄).
+  - "재발급 안내는 안 왔어요"처럼 card와 관계없다고 정한 문장을 모델이 yes로 보기도 한다.
+  - 모델은 "모르겠다"(unknown)를 배우지 않았다. unknown은 규칙(모르 · 확인 중)과 기준값이 맡는다.
+  - 모델 값의 확인 필요는 기준값으로만 정한다. 모델이 틀렸는데 확신하면 needsCheck=false로 나온다.
+
 ## 실험 (experiments)
-secondary · card 판단을 규칙 대신 작은 분류 모델(TF-IDF 글자 n-gram + 로지스틱 회귀)로 할 수 있는지 비교한다. 아직 `src`에서 쓰지 않는다.
+모델을 다시 만들거나 규칙과 비교한다.
 ```bash
 pip install -r experiments/classifier/requirements.txt
 python experiments/classifier/make_data.py   # [예시] 데이터 → data/classifier/{train,val,test}.json
 python experiments/classifier/train.py       # 학습 · 규칙과 비교 → REPORT.md, src/models/classifier.json, parity.json
+node experiments/classifier/hybrid.mjs       # 기준값 고르기(검증) · 규칙/모델/하이브리드 · v0.3.0 비교 → REPORT.md
 ```
-결과는 `experiments/classifier/REPORT.md`. 규칙 쪽 비교에는 node가 필요하다(`experiments/classifier/rules.mjs`).
+결과는 `experiments/classifier/REPORT.md`. 규칙 쪽 비교에는 node가 필요하다(`experiments/classifier/rules.mjs`). 모델을 다시 만들면 `parity.json`도 바뀌므로 `npm test`로 JS와 같은지 확인한다.
 
 ## 버전 올리기
 ```bash
-npm version minor        # 0.3.0 → 0.4.0, 태그 v0.4.0 생성
+npm version minor        # 예: 0.4.0 → 0.5.0, 태그 생성
 git push --follow-tags
 ```

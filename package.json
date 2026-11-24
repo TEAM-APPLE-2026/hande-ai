@@ -1,7 +1,7 @@
 {
   "name": "@team-apple/hande-ai",
-  "version": "0.3.0",
-  "description": "HANDE AI 모듈 — 피해 글 정리(extract) · 같은 사건 찾기(match) · 로펌용 요약(summarize). 브라우저에서 실행",
+  "version": "0.4.0",
+  "description": "HANDE AI 모듈 — 피해 글 정리(extract) · 같은 사건 찾기(match) · 새 그룹 초안(draftGroup) · 로펌용 요약(summarize). 브라우저에서 실행",
   "type": "module",
   "main": "src/index.js",
   "exports": { ".": "./src/index.js" },
@@ -10,7 +10,7 @@
     "test": "node --test test/*.test.js",
     "eval": "node eval/run.js"
   },
-  "engines": { "node": ">=20" },
+  "engines": { "node": ">=20.10" },
   "license": "UNLICENSED",
   "private": true
 }

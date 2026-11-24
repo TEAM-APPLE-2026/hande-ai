@@ -14,7 +14,7 @@
  },
  "split": "train",
  "random_seed": 20261125,
- "count": 392,
+ "count": 418,
  "items": [
   {
    "id": "s000-0",
@@ -76,70 +76,6 @@
    "id": "s000-7",
    "seed": 0,
    "text": "유출 안내를 받은 뒤로 스미싱 문자가 여러 번 왔음.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-0",
-   "seed": 1,
-   "text": "△△병원 유출 이후로 보이스피싱 전화를 몇 차례 받았습니다",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-1",
-   "seed": 1,
-   "text": "△△통신사 유출 이후로 사칭 전화를 여러 번 받았습니다.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-2",
-   "seed": 1,
-   "text": "◇◇은행 유출 이후로 검찰 사칭 전화를 몇 차례 받았음.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-3",
-   "seed": 1,
-   "text": "○○마트 유출 이후로 보이스피싱 전화를 두 번 받았어요.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-4",
-   "seed": 1,
-   "text": "○○쇼핑 유출 이후로 보이스피싱 전화를 몇 차례 받았음 ㅠㅠ",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-5",
-   "seed": 1,
-   "text": "☆☆여행사 유출 이후로 사칭 전화를 여러 번 받았음.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-6",
-   "seed": 1,
-   "text": "○○쇼핑 유출 이후로 보이스피싱 전화를 여러 번 받았음.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s001-7",
-   "seed": 1,
-   "text": "△△병원 유출 이후로 검찰 사칭 전화를 여러 번 받았습니다",
    "secondary": "yes",
    "card": "none",
    "example": true
@@ -337,65 +273,65 @@
    "example": true
   },
   {
-   "id": "s005-0",
-   "seed": 5,
-   "text": "이상한 문자가 꽤 많이 왔습니다.",
+   "id": "s006-0",
+   "seed": 6,
+   "text": "스미싱 문자는 물론이고 보이스피싱 전화까지 왔어요.",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-1",
-   "seed": 5,
-   "text": "이상한 문자가 한두 번이 아니게 왔습니다",
+   "id": "s006-1",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 받았어요.",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-2",
-   "seed": 5,
-   "text": "이상한 문자가 적지 않게 왔음",
+   "id": "s006-2",
+   "seed": 6,
+   "text": "스미싱 문자는 물론이고 보이스피싱 전화까지 받았어요",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-3",
-   "seed": 5,
-   "text": "이상한 문자가 꽤 많이 왔어요",
+   "id": "s006-3",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 왔습니다!",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-4",
-   "seed": 5,
-   "text": "이상한 문자가 적지 않게 왔어요!",
+   "id": "s006-4",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 받았어요!",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-5",
-   "seed": 5,
-   "text": "이상한 문자가 한두 번이 아니게 왔음.",
+   "id": "s006-5",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 왔습니다!",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-6",
-   "seed": 5,
-   "text": "이상한 문자가 꽤 많이 왔음 ㅠㅠ",
+   "id": "s006-6",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 왔어요 ㅠㅠ",
    "secondary": "yes",
    "card": "none",
    "example": true
   },
   {
-   "id": "s005-7",
-   "seed": 5,
-   "text": "이상한 문자가 한두 번이 아니게 왔어요!",
+   "id": "s006-7",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 왔어요",
    "secondary": "yes",
    "card": "none",
    "example": true
@@ -593,6 +529,134 @@
    "example": true
   },
   {
+   "id": "s012-0",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 있었습니다 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-1",
+   "seed": 12,
+   "text": "모르는 이체가 제 계좌에서 빠져나갔어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-2",
+   "seed": 12,
+   "text": "제 계좌에서 모르는 이체가 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-3",
+   "seed": 12,
+   "text": "무단 이체가 제 계좌에서 빠져나갔어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-4",
+   "seed": 12,
+   "text": "모르는 이체가 제 계좌에서 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-5",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 확인됐어요",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-6",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-7",
+   "seed": 12,
+   "text": "무단 이체가 제 계좌에서 있었어요 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-0",
+   "seed": 13,
+   "text": "모르는 사이트에서 제 아이디로 로그인 시도 알림이 떴어요",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-1",
+   "seed": 13,
+   "text": "해외 사이트에서 제 아이디로 로그인 시도 알림이 왔습니다!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-2",
+   "seed": 13,
+   "text": "해외 사이트에서 제 계정으로 로그인 시도 알림이 왔습니다",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-3",
+   "seed": 13,
+   "text": "해외 사이트에서 제 계정으로 로그인 시도 알림이 떴어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-4",
+   "seed": 13,
+   "text": "모르는 사이트에서 제 아이디로 로그인 시도 알림이 왔어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-5",
+   "seed": 13,
+   "text": "해외 사이트에서 제 아이디로 로그인 시도 알림이 떴어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-6",
+   "seed": 13,
+   "text": "해외 사이트에서 제 계정으로 로그인 시도 알림이 왔어요 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s013-7",
+   "seed": 13,
+   "text": "모르는 사이트에서 제 계정으로 로그인 시도 알림이 떴어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
    "id": "s014-0",
    "seed": 14,
    "text": "택배 기사를 사칭한 문자가 왔습니다.",
@@ -716,70 +780,6 @@
    "id": "s016-7",
    "seed": 16,
    "text": "제 번호로 모르는 사이트에 가입된 걸 확인했어요 ㅠㅠ",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-0",
-   "seed": 17,
-   "text": "중고거래 사기에 제 명의가 도용됐대요",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-1",
-   "seed": 17,
-   "text": "오픈마켓 사기에 제 명의가 사용됐대요!",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-2",
-   "seed": 17,
-   "text": "오픈마켓 사기에 제 명의가 쓰였대요.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-3",
-   "seed": 17,
-   "text": "오픈마켓 사기에 제 명의가 도용됐대요.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-4",
-   "seed": 17,
-   "text": "중고거래 사기에 제 이름이 쓰였대요.",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-5",
-   "seed": 17,
-   "text": "오픈마켓 사기에 제 이름이 쓰였대요!",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-6",
-   "seed": 17,
-   "text": "오픈마켓 사기에 제 이름이 사용됐대요",
-   "secondary": "yes",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s017-7",
-   "seed": 17,
-   "text": "중고거래 사기에 제 이름이 사용됐대요!",
    "secondary": "yes",
    "card": "none",
    "example": true
@@ -977,54 +977,6 @@
    "example": true
   },
   {
-   "id": "s021-0",
-   "seed": 21,
-   "text": "△△카드사에서 카드가 부정 사용됐다고 알려줬어요",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s021-1",
-   "seed": 21,
-   "text": "◇◇카드에서 카드가 부정 사용됐다고 전화가 왔어요",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s021-2",
-   "seed": 21,
-   "text": "◇◇카드에서 제 카드가 부정 사용됐다고 전화가 왔어요",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s021-3",
-   "seed": 21,
-   "text": "□□카드사에서 카드가 부정 사용됐다고 연락이 왔어요",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s021-4",
-   "seed": 21,
-   "text": "◇◇카드에서 제 카드가 부정 사용됐다고 알려줬어요.",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s021-5",
-   "seed": 21,
-   "text": "◇◇카드에서 제 카드가 부정 사용됐다고 연락이 왔어요!",
-   "secondary": "yes",
-   "card": "yes",
-   "example": true
-  },
-  {
    "id": "s022-0",
    "seed": 22,
    "text": "카드 정보가 유출된 뒤로 결제 승인 문자가 왔어요 ㅠㅠ",
@@ -1084,6 +1036,54 @@
    "id": "s022-7",
    "seed": 22,
    "text": "카드번호가 털리고 나서 이상한 결제 문자가 왔어요!",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-0",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 게임 아이템을 샀어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-1",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 결제를 했어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-2",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 해외 직구를 했어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-3",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 결제를 했어요",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-4",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 게임 아이템을 샀어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-5",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 해외 직구를 했어요.",
    "secondary": "yes",
    "card": "yes",
    "example": true
@@ -1217,6 +1217,54 @@
    "example": true
   },
   {
+   "id": "s027-0",
+   "seed": 27,
+   "text": "카드번호도 같이 유출됐어요",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s027-1",
+   "seed": 27,
+   "text": "카드번호도 같이 털렸어요!",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s027-2",
+   "seed": 27,
+   "text": "카드 정보도 같이 유출됐어요 ㅠㅠ",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s027-3",
+   "seed": 27,
+   "text": "카드번호도 같이 새어 나갔대요!",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s027-4",
+   "seed": 27,
+   "text": "카드 정보도 같이 새어 나갔대요",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s027-5",
+   "seed": 27,
+   "text": "카드 정보도 같이 털렸어요!",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
    "id": "s028-0",
    "seed": 28,
    "text": "☆☆여행사에 등록해 둔 카드 정보까지 나갔대요.",
@@ -1265,163 +1313,51 @@
    "example": true
   },
   {
-   "id": "s030-0",
-   "seed": 30,
-   "text": "결국 카드를 정지하고 재발급 받음!",
+   "id": "s029-0",
+   "seed": 29,
+   "text": "카드 유효기간까지 털렸다고 해요",
    "secondary": "none",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s030-1",
-   "seed": 30,
-   "text": "결국 카드를 새로 발급 받았어요",
+   "id": "s029-1",
+   "seed": 29,
+   "text": "CVC 번호까지 유출됐습니다",
    "secondary": "none",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s030-2",
-   "seed": 30,
-   "text": "결국 카드를 새로 발급 받았습니다",
+   "id": "s029-2",
+   "seed": 29,
+   "text": "CVC 번호까지 털렸다고 해요 ㅠㅠ",
    "secondary": "none",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s030-3",
-   "seed": 30,
-   "text": "결국 카드를 새로 발급 받음.",
+   "id": "s029-3",
+   "seed": 29,
+   "text": "카드 유효기간까지 유출됐습니다.",
    "secondary": "none",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s030-4",
-   "seed": 30,
-   "text": "결국 카드를 정지하고 재발급 받았습니다.",
+   "id": "s029-4",
+   "seed": 29,
+   "text": "CVC 번호까지 유출됐대요!",
    "secondary": "none",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s030-5",
-   "seed": 30,
-   "text": "결국 카드를 정지하고 재발급 받았어요",
+   "id": "s029-5",
+   "seed": 29,
+   "text": "카드 유효기간까지 유출됐대요.",
    "secondary": "none",
    "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-0",
-   "seed": 31,
-   "text": "◇◇카드에서 카드 정보가 유출됐을 수 있으니 재발급하라고 안내했어요",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-1",
-   "seed": 31,
-   "text": "□□카드사에서 카드 정보가 유출됐을 수 있으니 재발급하라고 했어요",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-2",
-   "seed": 31,
-   "text": "◇◇카드에서 유출 대상이라고 재발급하라고 안내했어요",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-3",
-   "seed": 31,
-   "text": "△△카드사에서 유출 대상이라고 재발급하라고 했어요 ㅠㅠ",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-4",
-   "seed": 31,
-   "text": "□□카드사에서 유출 대상이라고 재발급하라고 하더라고요",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s031-5",
-   "seed": 31,
-   "text": "◇◇카드에서 카드 정보가 유출됐을 수 있으니 재발급하라고 하더라고요",
-   "secondary": "none",
-   "card": "yes",
-   "example": true
-  },
-  {
-   "id": "s032-0",
-   "seed": 32,
-   "text": "스미싱 문자는 안 왔어요!",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-1",
-   "seed": 32,
-   "text": "스미싱 문자는 안 왔습니다 ㅠㅠ",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-2",
-   "seed": 32,
-   "text": "스미싱 문자는 아직 안 왔어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-3",
-   "seed": 32,
-   "text": "아직 스미싱 문자는 안 왔어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-4",
-   "seed": 32,
-   "text": "다행히 스미싱 문자는 안 왔어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-5",
-   "seed": 32,
-   "text": "다행히 스미싱 문자는 오지 않았어요 ㅠㅠ",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-6",
-   "seed": 32,
-   "text": "스미싱 문자는 오지 않았어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s032-7",
-   "seed": 32,
-   "text": "아직 스미싱 문자는 오지 않았어요!",
-   "secondary": "no",
-   "card": "none",
    "example": true
   },
   {
@@ -1484,54 +1420,6 @@
    "id": "s034-7",
    "seed": 34,
    "text": "다행히 이상한 문자는 안 받았어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-0",
-   "seed": 35,
-   "text": "보이스피싱 전화는 받은 적 없어요 ㅠㅠ",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-1",
-   "seed": 35,
-   "text": "보이스피싱 전화는 한 번도 안 왔어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-2",
-   "seed": 35,
-   "text": "보이스피싱 전화는 못 받았어요.",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-3",
-   "seed": 35,
-   "text": "사칭 전화는 받은 적 없어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-4",
-   "seed": 35,
-   "text": "사칭 전화는 한 번도 안 왔어요",
-   "secondary": "no",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s035-5",
-   "seed": 35,
-   "text": "사칭 전화는 못 받았어요",
    "secondary": "no",
    "card": "none",
    "example": true
@@ -1601,49 +1489,97 @@
    "example": true
   },
   {
-   "id": "s039-0",
-   "seed": 39,
-   "text": "아직 아무 일도 없네요 ㅠㅠ",
+   "id": "s037-0",
+   "seed": 37,
+   "text": "도용 피해는 없는 것 같아요!",
    "secondary": "no",
    "card": "none",
    "example": true
   },
   {
-   "id": "s039-1",
-   "seed": 39,
-   "text": "지금까지 아무 일도 없었어요.",
+   "id": "s037-1",
+   "seed": 37,
+   "text": "명의 도용은 확인되지 않았어요.",
    "secondary": "no",
    "card": "none",
    "example": true
   },
   {
-   "id": "s039-2",
-   "seed": 39,
-   "text": "아직 아무 일도 일어나지 않았어요",
+   "id": "s037-2",
+   "seed": 37,
+   "text": "도용 피해는 확인되지 않았어요",
    "secondary": "no",
    "card": "none",
    "example": true
   },
   {
-   "id": "s039-3",
-   "seed": 39,
-   "text": "지금까지 아무 일도 없네요!",
+   "id": "s037-3",
+   "seed": 37,
+   "text": "명의 도용은 아직 없대요.",
    "secondary": "no",
    "card": "none",
    "example": true
   },
   {
-   "id": "s039-4",
-   "seed": 39,
-   "text": "아직 아무 일도 없었어요 ㅠㅠ",
+   "id": "s037-4",
+   "seed": 37,
+   "text": "명의 도용은 없는 것 같아요 ㅠㅠ",
    "secondary": "no",
    "card": "none",
    "example": true
   },
   {
-   "id": "s039-5",
-   "seed": 39,
-   "text": "지금까지 아무 일도 일어나지 않았어요.",
+   "id": "s037-5",
+   "seed": 37,
+   "text": "도용 피해는 아직 없대요!",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-0",
+   "seed": 38,
+   "text": "통장에서 빠져나간 돈은 하나도 없어요",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-1",
+   "seed": 38,
+   "text": "계좌에서 빠져나간 돈은 하나도 없어요.",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-2",
+   "seed": 38,
+   "text": "계좌에서 빠져나간 돈은 없어요!",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-3",
+   "seed": 38,
+   "text": "통장에서 빠져나간 돈은 없어요!",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-4",
+   "seed": 38,
+   "text": "계좌에서 빠져나간 돈은 없었습니다",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s038-5",
+   "seed": 38,
+   "text": "통장에서 빠져나간 돈은 없었습니다 ㅠㅠ",
    "secondary": "no",
    "card": "none",
    "example": true
@@ -2337,179 +2273,131 @@
    "example": true
   },
   {
-   "id": "s055-0",
-   "seed": 55,
-   "text": "2차 피해는 아직 없지만 카드번호까지 털렸대요.",
+   "id": "s056-0",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 이상한 연락은 없습니다 ㅠㅠ",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-1",
-   "seed": 55,
-   "text": "별다른 피해는 없는데 카드번호까지 털렸대요",
+   "id": "s056-1",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 이상한 연락은 없습니다!",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-2",
-   "seed": 55,
-   "text": "별다른 피해는 없는데 카드 유효기간까지 유출됐대요.",
+   "id": "s056-2",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 이상한 연락은 없었어요",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-3",
-   "seed": 55,
-   "text": "2차 피해는 아직 없지만 카드 유효기간까지 유출됐대요.",
+   "id": "s056-3",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 아직 안 왔어요.",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-4",
-   "seed": 55,
-   "text": "2차 피해는 아직 없지만 카드 유효기간까지 유출됐습니다.",
+   "id": "s056-4",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 없습니다.",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-5",
-   "seed": 55,
-   "text": "별다른 피해는 없는데 카드 유효기간까지 유출됐습니다.",
+   "id": "s056-5",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 이상한 연락은 아직 안 왔어요!",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-6",
-   "seed": 55,
-   "text": "별다른 피해는 없는데 카드번호까지 유출됐대요.",
+   "id": "s056-6",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 스미싱 문자는 없습니다 ㅠㅠ",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s055-7",
-   "seed": 55,
-   "text": "2차 피해는 아직 없지만 카드번호까지 유출됐대요!",
+   "id": "s056-7",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 없었어요",
    "secondary": "no",
    "card": "yes",
    "example": true
   },
   {
-   "id": "s059-0",
-   "seed": 59,
-   "text": "카드번호는 포함되지 않았대요. 그런데 택배 사칭 문자가 세 번 왔어요.",
+   "id": "s060-0",
+   "seed": 60,
+   "text": "카드는 문제없다는데 보이스피싱 전화가 두 번 왔어요!",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-1",
-   "seed": 59,
-   "text": "카드번호는 이번 유출 대상이 아니래요. 그런데 이상한 링크 문자가 세 번 왔어요.",
+   "id": "s060-1",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 자꾸 와요",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-2",
-   "seed": 59,
-   "text": "카드번호는 포함되지 않았대요. 그런데 이상한 링크 문자가 세 번 왔어요!",
+   "id": "s060-2",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 검찰 사칭 전화가 두 번 왔어요",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-3",
-   "seed": 59,
-   "text": "카드번호는 이번 유출 대상이 아니래요. 그런데 택배 사칭 문자가 세 번 왔어요.",
+   "id": "s060-3",
+   "seed": 60,
+   "text": "카드는 문제없다는데 검찰 사칭 전화가 자꾸 와요!",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-4",
-   "seed": 59,
-   "text": "카드번호는 포함되지 않았대요. 그런데 택배 사칭 문자가 계속 와요 ㅠㅠ",
+   "id": "s060-4",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 두 번 왔어요",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-5",
-   "seed": 59,
-   "text": "카드번호는 포함되지 않았대요. 그런데 이상한 링크 문자가 계속 와요",
+   "id": "s060-5",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 계속 옵니다.",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-6",
-   "seed": 59,
-   "text": "카드번호는 이번 유출 대상이 아니래요. 그런데 이상한 링크 문자가 계속 와요 ㅠㅠ",
+   "id": "s060-6",
+   "seed": 60,
+   "text": "카드는 문제없다는데 보이스피싱 전화가 자꾸 와요.",
    "secondary": "yes",
    "card": "no",
    "example": true
   },
   {
-   "id": "s059-7",
-   "seed": 59,
-   "text": "카드번호는 이번 유출 대상이 아니래요. 그런데 택배 사칭 문자가 계속 와요",
+   "id": "s060-7",
+   "seed": 60,
+   "text": "카드는 문제없다는데 검찰 사칭 전화가 두 번 왔어요.",
    "secondary": "yes",
    "card": "no",
-   "example": true
-  },
-  {
-   "id": "s061-0",
-   "seed": 61,
-   "text": "재발급 안내는 안 왔어요",
-   "secondary": "none",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s061-1",
-   "seed": 61,
-   "text": "카드사 재발급 연락은 안 왔어요",
-   "secondary": "none",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s061-2",
-   "seed": 61,
-   "text": "재발급 안내는 받지 않았어요 ㅠㅠ",
-   "secondary": "none",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s061-3",
-   "seed": 61,
-   "text": "재발급 안내는 없었어요!",
-   "secondary": "none",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s061-4",
-   "seed": 61,
-   "text": "카드사 재발급 연락은 받지 않았어요.",
-   "secondary": "none",
-   "card": "none",
-   "example": true
-  },
-  {
-   "id": "s061-5",
-   "seed": 61,
-   "text": "카드사 재발급 연락은 없었어요 ㅠㅠ",
-   "secondary": "none",
-   "card": "none",
    "example": true
   },
   {
@@ -2833,6 +2721,38 @@
    "example": true
   },
   {
+   "id": "s069-0",
+   "seed": 69,
+   "text": "동생도 ○○쇼핑 회원이라 같이 알아봤어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-1",
+   "seed": 69,
+   "text": "친구도 △△통신사 회원이라 같이 확인해 봤어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-2",
+   "seed": 69,
+   "text": "친구도 ○○마트 회원이라 같이 알아봤어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-3",
+   "seed": 69,
+   "text": "동생도 ○○마트 회원이라 같이 확인해 봤어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
    "id": "s070-0",
    "seed": 70,
    "text": "비밀번호를 바로 바꿨습니다",
@@ -3148,6 +3068,294 @@
    "id": "s075-7",
    "seed": 75,
    "text": "안내 문자가 없어서 유출된 줄 몰랐어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-0",
+   "seed": 79,
+   "text": "고객정보가 털렸대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-1",
+   "seed": 79,
+   "text": "개인정보가 유출됐다고 합니다",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-2",
+   "seed": 79,
+   "text": "고객정보가 새어 나갔대요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-3",
+   "seed": 79,
+   "text": "개인정보가 유출됐대요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-4",
+   "seed": 79,
+   "text": "회원 정보가 새어 나갔대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-5",
+   "seed": 79,
+   "text": "고객정보가 유출됐다고 합니다 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-6",
+   "seed": 79,
+   "text": "회원 정보가 유출됐대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s079-7",
+   "seed": 79,
+   "text": "회원 정보가 유출됐다고 합니다.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-0",
+   "seed": 80,
+   "text": "△△통신사에서 고객 정보가 유출됐대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-1",
+   "seed": 80,
+   "text": "○○쇼핑에서 고객 정보가 새어 나갔대요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-2",
+   "seed": 80,
+   "text": "○○쇼핑에서 회원 정보가 털렸다고 해요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-3",
+   "seed": 80,
+   "text": "□□몰에서 회원 정보가 새어 나갔대요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-4",
+   "seed": 80,
+   "text": "☆☆여행사에서 회원 정보가 유출됐대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s080-5",
+   "seed": 80,
+   "text": "△△병원에서 고객 정보가 털렸다고 해요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-0",
+   "seed": 81,
+   "text": "이름과 계좌번호가 나갔어요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-1",
+   "seed": 81,
+   "text": "연락처와 이메일이 나갔어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-2",
+   "seed": 81,
+   "text": "연락처와 이메일이 털렸대요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-3",
+   "seed": 81,
+   "text": "아이디와 비밀번호가 털렸대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-4",
+   "seed": 81,
+   "text": "이름과 계좌번호가 유출됐대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-5",
+   "seed": 81,
+   "text": "이름과 계좌번호가 털렸대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-6",
+   "seed": 81,
+   "text": "아이디와 비밀번호가 나갔어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s081-7",
+   "seed": 81,
+   "text": "연락처와 이메일이 유출됐대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-0",
+   "seed": 82,
+   "text": "해킹 사고로 회원 정보가 털렸어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-1",
+   "seed": 82,
+   "text": "해킹 사고로 고객정보가 새어 나갔습니다.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-2",
+   "seed": 82,
+   "text": "□□몰 해킹으로 고객정보가 새어 나갔습니다.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-3",
+   "seed": 82,
+   "text": "○○마트 해킹으로 고객정보가 유출됐어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-4",
+   "seed": 82,
+   "text": "해킹 사고로 고객정보가 털렸어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-5",
+   "seed": 82,
+   "text": "△△병원 해킹으로 고객정보가 털렸어요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-6",
+   "seed": 82,
+   "text": "○○쇼핑 해킹으로 회원 정보가 털렸어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s082-7",
+   "seed": 82,
+   "text": "해킹 사고로 회원 정보가 새어 나갔습니다",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-0",
+   "seed": 83,
+   "text": "여권 정보와 생년월일이 나갔대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-1",
+   "seed": 83,
+   "text": "주민등록번호와 주소가 포함됐대요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-2",
+   "seed": 83,
+   "text": "여권 정보와 생년월일이 유출됐대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-3",
+   "seed": 83,
+   "text": "여권 정보와 생년월일이 포함됐대요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-4",
+   "seed": 83,
+   "text": "주민등록번호와 주소가 유출됐대요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s083-5",
+   "seed": 83,
+   "text": "주민등록번호와 주소가 나갔대요.",
    "secondary": "none",
    "card": "none",
    "example": true
