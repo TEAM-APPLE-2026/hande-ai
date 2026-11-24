@@ -1,0 +1,676 @@
+{
+ "note": "[예시] 직접 만든 문장. 실제 피해자 글·회사·개인정보 아님. 회사 이름은 기호만.",
+ "labels": {
+  "secondary": [
+   "yes",
+   "no",
+   "none"
+  ],
+  "card": [
+   "yes",
+   "no",
+   "none"
+  ]
+ },
+ "split": "val",
+ "random_seed": 20261125,
+ "count": 82,
+ "items": [
+  {
+   "id": "s006-0",
+   "seed": 6,
+   "text": "스미싱 문자는 물론이고 보이스피싱 전화까지 왔어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-1",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 받았어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-2",
+   "seed": 6,
+   "text": "스미싱 문자는 물론이고 보이스피싱 전화까지 받았어요",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-3",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 왔습니다!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-4",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 받았어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-5",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 왔습니다!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-6",
+   "seed": 6,
+   "text": "스미싱 문자뿐만 아니라 보이스피싱 전화까지 왔어요 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s006-7",
+   "seed": 6,
+   "text": "스미싱 문자에다가 보이스피싱 전화까지 왔어요",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-0",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 돈 보내 달라는 메시지가 갔다고 해요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-1",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 급하게 송금해 달라는 메시지가 갔다고 해요 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-2",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 급하게 송금해 달라는 메시지가 갔대요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-3",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 돈 보내 달라는 메시지가 갔습니다!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-4",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 돈 보내 달라는 메시지가 갔대요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s011-5",
+   "seed": 11,
+   "text": "가족한테 제 이름으로 급하게 송금해 달라는 메시지가 갔습니다!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-0",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 있었습니다 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-1",
+   "seed": 12,
+   "text": "모르는 이체가 제 계좌에서 빠져나갔어요.",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-2",
+   "seed": 12,
+   "text": "제 계좌에서 모르는 이체가 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-3",
+   "seed": 12,
+   "text": "무단 이체가 제 계좌에서 빠져나갔어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-4",
+   "seed": 12,
+   "text": "모르는 이체가 제 계좌에서 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-5",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 확인됐어요",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-6",
+   "seed": 12,
+   "text": "제 계좌에서 무단 이체가 있었어요!",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s012-7",
+   "seed": 12,
+   "text": "무단 이체가 제 계좌에서 있었어요 ㅠㅠ",
+   "secondary": "yes",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s024-0",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 게임 아이템을 샀어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-1",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 결제를 했어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-2",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 해외 직구를 했어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-3",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 누가 그 카드로 결제를 했어요",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-4",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 게임 아이템을 샀어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s024-5",
+   "seed": 24,
+   "text": "카드번호가 유출돼서 그 카드로 누가 해외 직구를 했어요.",
+   "secondary": "yes",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-0",
+   "seed": 29,
+   "text": "카드 유효기간까지 털렸다고 해요",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-1",
+   "seed": 29,
+   "text": "CVC 번호까지 유출됐습니다",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-2",
+   "seed": 29,
+   "text": "CVC 번호까지 털렸다고 해요 ㅠㅠ",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-3",
+   "seed": 29,
+   "text": "카드 유효기간까지 유출됐습니다.",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-4",
+   "seed": 29,
+   "text": "CVC 번호까지 유출됐대요!",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s029-5",
+   "seed": 29,
+   "text": "카드 유효기간까지 유출됐대요.",
+   "secondary": "none",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s037-0",
+   "seed": 37,
+   "text": "도용 피해는 없는 것 같아요!",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s037-1",
+   "seed": 37,
+   "text": "명의 도용은 확인되지 않았어요.",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s037-2",
+   "seed": 37,
+   "text": "도용 피해는 확인되지 않았어요",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s037-3",
+   "seed": 37,
+   "text": "명의 도용은 아직 없대요.",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s037-4",
+   "seed": 37,
+   "text": "명의 도용은 없는 것 같아요 ㅠㅠ",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s037-5",
+   "seed": 37,
+   "text": "도용 피해는 아직 없대요!",
+   "secondary": "no",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s046-0",
+   "seed": 46,
+   "text": "카드사에 확인해 보니 제 카드는 괜찮대요!",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s046-1",
+   "seed": 46,
+   "text": "카드사에 확인해 보니 제 카드는 이상 없대요!",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s046-2",
+   "seed": 46,
+   "text": "카드사에 물어보니 제 카드는 이상 없대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s046-3",
+   "seed": 46,
+   "text": "카드사에 물어보니 제 카드는 괜찮대요 ㅠㅠ",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s046-4",
+   "seed": 46,
+   "text": "카드사에 확인해 보니 제 카드는 문제없대요",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s046-5",
+   "seed": 46,
+   "text": "카드사에 물어보니 제 카드는 문제없대요!",
+   "secondary": "none",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s050-0",
+   "seed": 50,
+   "text": "카드는 괜찮다고 하고 아직 이상한 연락도 없어요.",
+   "secondary": "no",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s050-1",
+   "seed": 50,
+   "text": "카드는 안전하다고 하고 아직 이상한 연락도 없어요",
+   "secondary": "no",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s050-2",
+   "seed": 50,
+   "text": "카드는 괜찮다고 하고 아직 피해도 없어요",
+   "secondary": "no",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s050-3",
+   "seed": 50,
+   "text": "카드는 안전하다고 하고 아직 피해도 없어요.",
+   "secondary": "no",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s056-0",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 이상한 연락은 없습니다 ㅠㅠ",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-1",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 이상한 연락은 없습니다!",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-2",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 이상한 연락은 없었어요",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-3",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 아직 안 왔어요.",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-4",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 없습니다.",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-5",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 이상한 연락은 아직 안 왔어요!",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-6",
+   "seed": 56,
+   "text": "카드 정보가 같이 나갔지만 스미싱 문자는 없습니다 ㅠㅠ",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s056-7",
+   "seed": 56,
+   "text": "유출 항목에 카드번호가 있었지만 스미싱 문자는 없었어요",
+   "secondary": "no",
+   "card": "yes",
+   "example": true
+  },
+  {
+   "id": "s060-0",
+   "seed": 60,
+   "text": "카드는 문제없다는데 보이스피싱 전화가 두 번 왔어요!",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-1",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 자꾸 와요",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-2",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 검찰 사칭 전화가 두 번 왔어요",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-3",
+   "seed": 60,
+   "text": "카드는 문제없다는데 검찰 사칭 전화가 자꾸 와요!",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-4",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 두 번 왔어요",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-5",
+   "seed": 60,
+   "text": "카드사에 물어보니 카드는 이상 없다는데 보이스피싱 전화가 계속 옵니다.",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-6",
+   "seed": 60,
+   "text": "카드는 문제없다는데 보이스피싱 전화가 자꾸 와요.",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s060-7",
+   "seed": 60,
+   "text": "카드는 문제없다는데 검찰 사칭 전화가 두 번 왔어요.",
+   "secondary": "yes",
+   "card": "no",
+   "example": true
+  },
+  {
+   "id": "s068-0",
+   "seed": 68,
+   "text": "택배 도착 알림이 문자로 왔는데 제가 주문한 거였어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s068-1",
+   "seed": 68,
+   "text": "택배 도착 알림이 카톡으로 왔는데 제가 주문한 거였어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s068-2",
+   "seed": 68,
+   "text": "배송 완료 안내가 카톡으로 왔는데 제가 주문한 거였어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s068-3",
+   "seed": 68,
+   "text": "배송 완료 안내가 문자로 왔는데 제가 주문한 거였어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-0",
+   "seed": 69,
+   "text": "동생도 ○○쇼핑 회원이라 같이 알아봤어요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-1",
+   "seed": 69,
+   "text": "친구도 △△통신사 회원이라 같이 확인해 봤어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-2",
+   "seed": 69,
+   "text": "친구도 ○○마트 회원이라 같이 알아봤어요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s069-3",
+   "seed": 69,
+   "text": "동생도 ○○마트 회원이라 같이 확인해 봤어요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-0",
+   "seed": 77,
+   "text": "은행 앱 업데이트가 느려요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-1",
+   "seed": 77,
+   "text": "카드 앱 업데이트가 느려요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-2",
+   "seed": 77,
+   "text": "은행 앱 로그인이 안 돼요 ㅠㅠ",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-3",
+   "seed": 77,
+   "text": "카드 앱 업데이트가 자꾸 튕겨요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-4",
+   "seed": 77,
+   "text": "카드 앱 로그인이 느려요.",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-5",
+   "seed": 77,
+   "text": "은행 앱 로그인이 자꾸 튕겨요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-6",
+   "seed": 77,
+   "text": "은행 앱 로그인이 느려요",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  },
+  {
+   "id": "s077-7",
+   "seed": 77,
+   "text": "카드 앱 로그인이 자꾸 튕겨요!",
+   "secondary": "none",
+   "card": "none",
+   "example": true
+  }
+ ]
+}
