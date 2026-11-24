@@ -8,12 +8,10 @@ const validDay = (y, m, d) => m >= 1 && m <= 12 && d >= 1 && d <= lastDay(y, m);
 
 const day = (y, m, d) => (validDay(y, m, d) ? { from: iso(y, m, d), to: iso(y, m, d), precision: 'day' } : null);
 
-// 월 단위: 초 1~10일, 중순 11~20일, 말 21일~말일, 없으면 1일~말일
-function month(y, m, part) {
+// 월 단위는 항상 1일~말일 (백엔드 save_report 검증). "10월 초/중순/말"의 세부 표현은 quote에만 남는다.
+function month(y, m) {
   if (m < 1 || m > 12) return null;
-  const end = lastDay(y, m);
-  const [a, b] = { 초: [1, 10], 상순: [1, 10], 중순: [11, 20], 말: [21, end], 하순: [21, end] }[part] ?? [1, end];
-  return { from: iso(y, m, a), to: iso(y, m, b), precision: 'month' };
+  return { from: iso(y, m, 1), to: iso(y, m, lastDay(y, m)), precision: 'month' };
 }
 const year = (y) => ({ from: iso(y, 1, 1), to: iso(y, 12, 31), precision: 'year' });
 const shift = (now, days) => { const d = new Date(now); d.setDate(d.getDate() + days); return d; };
@@ -25,9 +23,9 @@ const PART = '(초|상순|중순|하순|말)?';
 const PATTERNS = [
   [/(?<!\d)((?:19|20)\d{2})\s?년\s?(\d{1,2})\s?월\s?(\d{1,2})\s?일/g, (m) => day(+m[1], +m[2], +m[3])],
   [/(?<!\d)((?:19|20)\d{2})\s?[.\-/]\s?(\d{1,2})\s?[.\-/]\s?(\d{1,2})(?!\d)/g, (m) => day(+m[1], +m[2], +m[3])],
-  [new RegExp(`(?<!\\d)((?:19|20)\\d{2})\\s?년\\s?(\\d{1,2})\\s?월\\s?${PART}`, 'g'), (m) => month(+m[1], +m[2], m[3])],
+  [new RegExp(`(?<!\\d)((?:19|20)\\d{2})\\s?년\\s?(\\d{1,2})\\s?월\\s?${PART}`, 'g'), (m) => month(+m[1], +m[2])],
   [/(?<!\d)(\d{1,2})\s?월\s?(\d{1,2})\s?일/g, (m, now) => day(now.getFullYear(), +m[1], +m[2])],
-  [new RegExp(`(?<!\\d)(\\d{1,2})\\s?월\\s?${PART}`, 'g'), (m, now) => month(now.getFullYear(), +m[1], m[2])],
+  [new RegExp(`(?<!\\d)(\\d{1,2})\\s?월\\s?${PART}`, 'g'), (m, now) => month(now.getFullYear(), +m[1])],
   [/(?<!\d)((?:19|20)\d{2})\s?년/g, (m) => year(+m[1])],
   [/지난\s?달|저번\s?달/g, (m, now) => { const d = new Date(now.getFullYear(), now.getMonth() - 1, 1); return month(d.getFullYear(), d.getMonth() + 1); }],
   [/이번\s?달|이달/g, (m, now) => month(now.getFullYear(), now.getMonth() + 1)],

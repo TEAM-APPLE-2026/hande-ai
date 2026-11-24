@@ -11,9 +11,9 @@ const fieldsOf = (text) => {
 };
 const dateOf = (text) => fieldsOf(text).notice_date.aiValue;
 
-test('ReportField 모양: key 6개, userValue=null, source=ai', () => {
+test('ReportField 모양: 기본 key 6개 + 찾은 경우 secondary_detail, userValue=null, source=ai', () => {
   const r = extract(TEXT, { now: NOW });
-  assert.deepEqual(r.fields.map((f) => f.key), FIELD_KEYS);
+  assert.deepEqual(r.fields.map((f) => f.key), [...FIELD_KEYS, 'secondary_detail']);
   for (const f of r.fields) {
     assert.deepEqual(Object.keys(f).sort(), ['aiValue', 'key', 'needsCheck', 'quote', 'source', 'userValue']);
     assert.equal(f.userValue, null);
@@ -26,12 +26,31 @@ test('예시 글에서 5개 정리, 카드 정보는 확인 필요', () => {
   const f = fieldsOf(TEXT);
   assert.equal(f.company.aiValue, '△△ 통신사');
   assert.equal(f.type.aiValue, 'privacy_leak');
-  assert.deepEqual(f.notice_date.aiValue, { from: '2026-10-01', to: '2026-10-10', precision: 'month' });
+  assert.deepEqual(f.notice_date.aiValue, { from: '2026-10-01', to: '2026-10-31', precision: 'month' });
+  assert.equal(f.notice_date.quote, '10월 초');
   assert.deepEqual(f.leaked.aiValue, ['이름', '연락처', '주소']);
   assert.equal(f.secondary.aiValue, 'yes');
+  assert.equal(f.secondary_detail.aiValue, '스미싱 문자 3회');
   assert.equal(f.card.aiValue, null);
   assert.equal(f.card.needsCheck, true);
-  assert.equal(Object.values(f).filter((x) => !x.needsCheck).length, 5);
+  assert.equal(FIELD_KEYS.filter((k) => !f[k].needsCheck).length, 5);
+});
+
+test('secondary_detail: 2차 피해가 없거나 모르면 필드를 넣지 않는다', () => {
+  for (const text of ['△△ 통신사에서 이름이 유출됐어요. 2차 피해는 아직 없어요.', '△△ 통신사에서 이름이 유출됐어요.', '△△ 통신사 유출이요. 2차 피해가 있는지는 잘 모르겠어요.']) {
+    assert.ok(!('secondary_detail' in fieldsOf(text)), text);
+  }
+});
+
+test('secondary_detail: 부정은 해당 절에서만 판단', () => {
+  assert.equal(fieldsOf('△△ 통신사 유출이요. 스미싱이 세 건 있었는데 카드 피해는 없어요.').secondary_detail.aiValue, '스미싱 문자 3회');
+  assert.ok(!('secondary_detail' in fieldsOf('△△ 통신사 유출이요. 스미싱 문자는 안 왔어요.')));
+});
+
+test('secondary_detail: 여러 종류와 숫자 횟수', () => {
+  const f = fieldsOf('△△ 은행 정보가 유출됐어요. 스미싱 문자가 2번 오고 보이스피싱 전화도 5회 받았어요. 무단 결제도 있었어요.');
+  assert.equal(f.secondary_detail.aiValue, '스미싱 문자 2회, 보이스피싱 전화 5회, 무단 결제');
+  assert.equal(f.secondary_detail.needsCheck, false);
 });
 
 test('quote는 원문 안에 그대로 있다', () => {
@@ -44,9 +63,10 @@ test('날짜: 여러 형식', () => {
     ['2025.3.14 해킹 안내 메일을 받았어요.', { from: '2025-03-14', to: '2025-03-14', precision: 'day' }],
     ['2025-12-01 유출 공지가 올라왔어요.', { from: '2025-12-01', to: '2025-12-01', precision: 'day' }],
     ['9월 5일에 유출 통지를 받았어요.', { from: '2026-09-05', to: '2026-09-05', precision: 'day' }],
-    ['10월 초에 유출 문자를 받았어요.', { from: '2026-10-01', to: '2026-10-10', precision: 'month' }],
-    ['10월 중순에 유출 문자를 받았어요.', { from: '2026-10-11', to: '2026-10-20', precision: 'month' }],
-    ['2월 말에 유출 문자를 받았어요.', { from: '2026-02-21', to: '2026-02-28', precision: 'month' }],
+    ['10월 초에 유출 문자를 받았어요.', { from: '2026-10-01', to: '2026-10-31', precision: 'month' }],
+    ['10월 중순에 유출 문자를 받았어요.', { from: '2026-10-01', to: '2026-10-31', precision: 'month' }],
+    ['10월 하순에 유출 문자를 받았어요.', { from: '2026-10-01', to: '2026-10-31', precision: 'month' }],
+    ['2월 말에 유출 문자를 받았어요.', { from: '2026-02-01', to: '2026-02-28', precision: 'month' }],
     ['8월에 유출 안내를 받았어요.', { from: '2026-08-01', to: '2026-08-31', precision: 'month' }],
     ['2024년 2월에 유출 안내를 받았어요.', { from: '2024-02-01', to: '2024-02-29', precision: 'month' }],
     ['2025년에 유출 안내를 받았어요.', { from: '2025-01-01', to: '2025-12-31', precision: 'year' }],
@@ -88,6 +108,63 @@ test('2차 피해 · 카드: yes / no / unknown', () => {
   const unk = fieldsOf('△△ 통신사 정보가 유출됐어요. 2차 피해가 있는지는 잘 모르겠어요.');
   assert.equal(unk.secondary.aiValue, 'unknown');
   assert.equal(unk.secondary.needsCheck, true);
+});
+
+test('부정: "스미싱 문자는 안 왔어요" → secondary no, 상세 없음', () => {
+  const text = '△△ 통신사 유출이요. 스미싱 문자는 안 왔어요.';
+  const f = fieldsOf(text);
+  assert.equal(f.secondary.aiValue, 'no');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.secondary.quote, '스미싱 문자는 안 왔어요.');
+  assert.ok(!('secondary_detail' in f));
+});
+
+test('부정: "이상한 문자는 없었고 카드는 괜찮대요" → secondary no, card no', () => {
+  const f = fieldsOf('이상한 문자는 없었고 카드는 괜찮대요.');
+  assert.equal(f.secondary.aiValue, 'no');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.card.aiValue, 'no');
+  assert.equal(f.card.needsCheck, false);
+  assert.equal(f.card.quote, '이상한 문자는 없었고 카드는 괜찮대요.');
+});
+
+test('긍정 유지: "스미싱 문자가 왔어요" → secondary yes', () => {
+  const f = fieldsOf('스미싱 문자가 왔어요.');
+  assert.equal(f.secondary.aiValue, 'yes');
+  assert.equal(f.secondary.needsCheck, false);
+  assert.equal(f.secondary_detail.aiValue, '스미싱 문자');
+});
+
+test('애매: "스미싱은 없었는데 어제 결제 문자가 왔어요" → unknown, 확인 필요, 상세 없음', () => {
+  const text = '스미싱은 없었는데 어제 결제 문자가 왔어요.';
+  const f = fieldsOf(text);
+  assert.equal(f.secondary.aiValue, 'unknown');
+  assert.equal(f.secondary.needsCheck, true);
+  assert.equal(f.secondary.quote, text);
+  assert.ok(!('secondary_detail' in f));
+});
+
+test('애매: 긍정 문장과 부정 문장이 같이 있으면 unknown, 확인 필요', () => {
+  const s = fieldsOf('스미싱 문자가 왔어요. 보이스피싱 전화는 없었어요.');
+  assert.equal(s.secondary.aiValue, 'unknown');
+  assert.equal(s.secondary.needsCheck, true);
+  assert.ok(!('secondary_detail' in s));
+  const c = fieldsOf('카드번호가 유출됐어요. 카드 정보는 유출되지 않았대요.');
+  assert.equal(c.card.aiValue, 'unknown');
+  assert.equal(c.card.needsCheck, true);
+});
+
+test('부정 범위: 다른 문장·다른 절의 부정은 무시', () => {
+  assert.equal(fieldsOf('스미싱 문자가 왔어요. 다른 문제는 없어요.').secondary.aiValue, 'yes');
+  const f = fieldsOf('스미싱 문자가 왔고 카드는 괜찮대요.');
+  assert.equal(f.secondary.aiValue, 'yes');
+  assert.equal(f.card.aiValue, 'no');
+});
+
+test('부정처럼 보이는 말은 부정이 아니다', () => {
+  for (const text of ['스미싱 문자가 끊임없이 왔어요.', '스미싱 문자가 적지 않게 왔어요.', '스미싱뿐만 아니라 보이스피싱도 왔어요.']) {
+    assert.equal(fieldsOf(text).secondary.aiValue, 'yes', text);
+  }
 });
 
 test('개인정보 유출이 아니면 type=null, 확인 필요', () => {
